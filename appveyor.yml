@@ -1,0 +1,37 @@
+version: 1.0.{build}
+image: WMF 5
+build: off
+
+# Skip on updates to the readme
+skip_commits:
+  message: /readme*/
+
+install:
+- ps: Install-PackageProvider -Name NuGet -Force
+- ps: Install-Module -Name PSScriptAnalyzer -Force
+- ps: Install-Module -Name Pester
+
+test_script:
+  - ps: |
+      Add-AppveyorTest -Name "PsScriptAnalyzer" -Outcome Running
+      $Results = Invoke-ScriptAnalyzer -Path $pwd -Recurse -Severity Error -ErrorAction SilentlyContinue
+      If ($Results) {
+        $ResultString = $Results | Out-String
+        Write-Warning $ResultString
+        Add-AppveyorMessage -Message "PSScriptAnalyzer output contained one or more result(s) with 'Error' severity.`
+        Check the 'Tests' tab of this build for more details." -Category Error
+        Update-AppveyorTest -Name "PsScriptAnalyzer" -Outcome Failed -ErrorMessage $ResultString
+        
+        # Failing the build
+        Throw "Build failed"
+      }
+      Else {
+        Update-AppveyorTest -Name "PsScriptAnalyzer" -Outcome Passed
+      }
+  - ps: |
+      $testResultsFile = ".\TestsResults.xml"
+      $res = Invoke-Pester -OutputFormat NUnitXml -OutputFile $testResultsFile -PassThru
+      (New-Object 'System.Net.WebClient').UploadFile("https://ci.appveyor.com/api/testresults/nunit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path $testResultsFile))
+      if ($res.FailedCount -gt 0) { 
+          throw "$($res.FailedCount) tests failed."
+      }
