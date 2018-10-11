@@ -1,22 +1,20 @@
  [CmdletBinding()]
 param ()
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
-Write-Output $here
-. "$PSCommandPath\..\Common\Connect-Office365.ps1"
+
+. "$here\..\Common\Connect-Office365.ps1"
 $session = Connect-Office365
 if ($null -eq $session)
 {
     Write-Error "Connection to Office 365 Failed"
 }
 try {
-    Import-Session
+    Import-PSSession -Session $session
 }
 catch {
     Write-Error "Unable to Import PSSession"
     throw "Unable to Connect to Office 365"
 }
-Import-PSSession -Session $session
-
 #Disable IMAP & POP in CAS Mailbox Plans
 Get-CASMailboxPlan -Filter {ImapEnabled -eq "true" -or PopEnabled -eq "true" } | set-CASMailboxPlan -ImapEnabled $false -PopEnabled $false
 
