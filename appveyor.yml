@@ -10,6 +10,7 @@ install:
 - ps: Install-PackageProvider -Name NuGet -Force
 - ps: Install-Module -Name PSScriptAnalyzer -Force
 - ps: Install-Module -Name Pester
+- ps: Install-Module -Name MSOnline -Force
 
 test_script:
   - ps: |
