@@ -1,3 +1,6 @@
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingConvertToSecureStringWithPlainText", "")]
+param()
+
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 . "$here\..\Connect-Office365.ps1"
 Import-Module MSOnline
