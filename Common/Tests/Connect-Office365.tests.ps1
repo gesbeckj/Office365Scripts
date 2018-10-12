@@ -21,7 +21,7 @@ Describe "Testing Connect-Office365"{
     Mock -CommandName New-PSSession {return "Session"}
     Mock -CommandName Connect-MsolService {return "Session"}
     It "Should not be Null normally"{
-        Connect-Office365 | Should Not be $null
+        Connect-Office365 | Should -Not -be $null
     }
 }
 }

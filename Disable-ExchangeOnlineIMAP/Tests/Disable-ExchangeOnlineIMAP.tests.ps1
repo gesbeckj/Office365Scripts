@@ -13,14 +13,14 @@ Describe "Testing Disable-ExchangeOnlineIMAP"{
             Function Import-PSSession {}
             Function Connect-MSOLService {}
             Function New-PSSession {"Session"}
-            Mock -CommandName "set-CASMailboxPlan" -MockWith {}
-            Mock -CommandName "set-CASMailbox" -MockWith {}
-            Mock -CommandName "Get-CASMailboxPlan" -MockWith {}
-            Mock -CommandName "Get-CASMailbox" -MockWith {}
+            Function set-CASMailboxPlan {}
+            Function set-CASMailbox {}
+            Function Get-CASMailboxPlan {}
+            Function Get-CASMailbox {}
             $password = 'bogus' | ConvertTo-SecureString -AsPlainText -Force
             $cred = New-Object pscredential('bogus', $password)
             function Get-Credential { return $cred } 
-            (. $here\..\Disable-ExchangeOnlineIMAP.ps1) | Should Be 0
+            (. $here\..\Disable-ExchangeOnlineIMAP.ps1) | Should -Be 0
         }
     }
     Context "Throw if CAS Mailbox Plan or a mailboxes has IMAP & POP enabled"{
@@ -29,10 +29,10 @@ Describe "Testing Disable-ExchangeOnlineIMAP"{
             Function Import-PSSession {}
             Function Connect-MSOLService {}
             Function New-PSSession {"Session"}
-            Mock -CommandName "set-CASMailboxPlan" -MockWith {}
-            Mock -CommandName "set-CASMailbox" -MockWith {}
-            Mock -CommandName "Get-CASMailboxPlan" -MockWith {}
-            Mock -CommandName "Get-CASMailbox" -MockWith {"Mailbox"}
+            Function set-CASMailboxPlan {}
+            Function set-CASMailbox {}
+            Function Get-CASMailboxPlan {}
+            Function Get-CASMailbox {"Mailbox"}
             $password = 'bogus' | ConvertTo-SecureString -AsPlainText -Force
             $cred = New-Object pscredential('bogus', $password)
             function Get-Credential { return $cred } 

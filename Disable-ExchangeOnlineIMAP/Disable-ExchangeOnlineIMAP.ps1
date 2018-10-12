@@ -1,4 +1,4 @@
- [CmdletBinding()]
+[CmdletBinding()]
 param ()
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 
@@ -27,4 +27,5 @@ if ($null -ne $Results)
 {
     Throw "Unable to Disable IMAP and POP on all existing mailboxes."
 }
+Write-Information "IMAP / POP are fully disabled"
 return 0

@@ -1,7 +1,9 @@
 function Connect-Office365
 {
     [CmdletBinding()]
-    param()
+    param(
+    [switch]$ConnectMSOLOnly
+    )
     #Attempt to Import the MSOnline Module
     try {
         Import-Module MSOnline
@@ -17,6 +19,9 @@ function Connect-Office365
         Write-Error "No credentials entered"
     }
     Connect-MsolService -Credential $Credential
-    $Session = New-PSSession -ConfigurationName Microsoft.Exchange -ConnectionUri https://outlook.office365.com/powershell-liveid/ -Credential $Credential -Authentication Basic -AllowRedirection
+    if (-not ($ConnectMSOLOnly))
+    {
+        $Session = New-PSSession -ConfigurationName Microsoft.Exchange -ConnectionUri https://outlook.office365.com/powershell-liveid/ -Credential $Credential -Authentication Basic -AllowRedirection
+    }
     return $Session
 }
