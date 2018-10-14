@@ -1,5 +1,6 @@
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingConvertToSecureStringWithPlainText", "")]
 param()
+
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 . "$here\..\Get-SuccessfulLogins.ps1"
 
