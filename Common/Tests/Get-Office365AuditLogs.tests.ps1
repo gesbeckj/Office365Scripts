@@ -10,6 +10,7 @@ Describe "Testing Get-Office365AuditLogs"{
     function Get-Credential { return $cred }
     Mock -CommandName New-PSSession {return "Session"}
     Mock -CommandName Connect-MsolService {return "Session"}
+    Mock -CommandName Remove-PSSession {}
     It 'Null should be returned if no audit logs exist'{
         function Search-unifiedAuditLog {}
         Function Import-PSSession {}
