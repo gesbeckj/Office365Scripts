@@ -1,7 +1,7 @@
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingConvertToSecureStringWithPlainText", "")]
 param()
 
-. "$here\..\Get-SuccessfulLogins.ps1"
+. "$here\.\Get-SuccessfulLogins.ps1"
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 Describe "Testing Get-SuccessfulLogins"{
     It "Script Should Exists"{
