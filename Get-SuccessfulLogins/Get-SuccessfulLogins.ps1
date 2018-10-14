@@ -6,7 +6,7 @@ Function Get-SuccessfulLogins
 param ()
 . "$here\..\Common\Get-Office365AuditLogs.ps1"
 $mergedObject = @()
-$logs = Get-Office365AuditLogs -Operations "UserLoggedIn"
+$logs = Get-Office365AuditLogs -Operations "UserLoggedIn" 
 $userIds = $logs.userIds | Sort-Object -Unique
 foreach ($userId in $userIds) 
 {
