@@ -20,5 +20,6 @@ do {
     Write-Information "Retrieved $($logs.count) logs"
     }while ($Logs.count % 5000 -eq 0 -and $logs.count -ne 0)
     Write-Information "Finished Retrieving logs"
+Remove-PSSession $Session
 Return $logs
 }
