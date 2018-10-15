@@ -3,17 +3,17 @@ param()
 
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 . "$here\..\Get-SuccessfulLogins.ps1"
-
+. "$here\..\Common\Get-Office365AuditLogs.ps1"
 Describe "Testing Get-SuccessfulLogins"{
     It "Script Should Exists"{
         (Test-Path "$here\Get-SuccessfulLogins.ps1") | Should Be $True
     }
     It "Should not throw"{
-        Function Get-Office65AuditLogs {Return $null}
+        Mock -CommandName Get-Office65AuditLogs -MockWith {Return $null}
         {Get-SuccessfulLogins} | Should Not Throw
     }
     It "If no logins exists should return null"{
-        Function Get-Office65AuditLogs {Return $null}
+        Mock -CommandName Get-Office65AuditLogs -MockWith {Return $null}
         Get-SuccessfulLogins | Should Be $null
     }
     #It "If Logins Exist should not return null"{
