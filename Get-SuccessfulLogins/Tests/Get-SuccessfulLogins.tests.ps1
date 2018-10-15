@@ -9,11 +9,11 @@ Describe "Testing Get-SuccessfulLogins"{
         (Test-Path "$here\Get-SuccessfulLogins.ps1") | Should Be $True
     }
     It "Should not throw"{
-        Mock -CommandName Get-Office65AuditLogs -MockWith {Return $null}
+        Function Get-Office65AuditLogs {Return $null}
         {Get-SuccessfulLogins} | Should Not Throw
     }
     It "If no logins exists should return null"{
-        Mock -CommandName Get-Office65AuditLogs -MockWith {Return $null}
+        Function Get-Office65AuditLogs {Return $null}
         Get-SuccessfulLogins | Should Be $null
     }
     #It "If Logins Exist should not return null"{
