@@ -4,6 +4,8 @@ Function Get-SuccessfulLogins
 {
 [CmdletBinding()]
 param ()
+
+write-output $here
 . "$here\..\Common\Get-Office365AuditLogs.ps1"
 $mergedObject = @()
 $logs = Get-Office365AuditLogs -Operations "UserLoggedIn" 
