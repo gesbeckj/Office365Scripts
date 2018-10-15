@@ -2,7 +2,7 @@
 param()
 
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
-. "$here\Get-SuccessfulLogins.ps1"
+. "$here\..\Get-SuccessfulLogins.ps1"
 
 Describe "Testing Get-SuccessfulLogins"{
     It "Script Should Exists"{
