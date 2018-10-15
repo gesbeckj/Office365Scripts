@@ -4,7 +4,7 @@ param()
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 . "$here\..\Get-SuccessfulLogins.ps1"
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
-. "$here\..\..\Get-Office365AuditLogs.ps1"
+. "$here\..\..\Common\Get-Office365AuditLogs.ps1"
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 Describe "Testing Get-SuccessfulLogins"{
     It "Script Should Exists"{
