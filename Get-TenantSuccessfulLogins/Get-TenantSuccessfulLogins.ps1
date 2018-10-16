@@ -5,10 +5,15 @@ param (
     [string]$TenantDomainName,
     [pscredential]$DelegatedAdminCred
 )
+if ($PSScriptRoot -eq $null)
+{
+    $here = Split-Path -Parent $MyInvocation.MyCommand.Path
+}
+else {
+    $here = $PSScriptRoot
+}
 
-$here = Split-Path -Parent $MyInvocation.MyCommand.Path
 . "$here\..\Common\Get-TenantOffice365AuditLogs.ps1"
-#. "$PSScriptRoot\..\Common\Get-TenantOffice365AuditLogs.ps1"
 $mergedObject = @()
 $logs = Get-TenantOffice365AuditLogs -Operations "UserLoggedIn" -TenantDomainName $TenantDomainName -DelegatedAdminCred $DelegatedAdminCred
 $userIds = $logs.userIds | Sort-Object -Unique
