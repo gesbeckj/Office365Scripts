@@ -1,9 +1,8 @@
-function Connect-TenantExchangeOnline
-{
+function Connect-TenantExchangeOnline {
     [CmdletBinding()]
     param(
-    [string]$TenantDomainName,
-    [pscredential]$DelegatedAdminCred
+        [string]$TenantDomainName,
+        [pscredential]$DelegatedAdminCred
     )
     #Attempt to Import the MSOnline Module
     try {
