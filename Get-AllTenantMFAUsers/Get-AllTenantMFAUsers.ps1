@@ -1,4 +1,4 @@
-Function Get-AllTenantSuccessfulLogins {
+Function Get-AllTenantMFAUsers {
     [CmdletBinding()]
     param (
         [parameter(
@@ -6,6 +6,7 @@ Function Get-AllTenantSuccessfulLogins {
             ValueFromPipelineByPropertyName = $true)]
         [psobject[]]$TenantsList
     )
+
     if ($PSScriptRoot -eq $null) {
         $here = Split-Path -Parent $MyInvocation.MyCommand.Path
     }
@@ -13,7 +14,7 @@ Function Get-AllTenantSuccessfulLogins {
         $here = $PSScriptRoot
     }
     . "$here\..\Common\Connect-Office365.ps1"
-    . "$here\..\Get-TenantSuccessfulLogins\Get-TenantSuccessfulLogins.ps1"
+    . "$here\..\Get-TenantMFAUsers\Get-TenantMFAUsers.ps1"
     if ($Null -eq $TenantsList) {
         $session = Connect-Office365 -ConnectMSOLOnly
         $session | out-null
@@ -22,11 +23,12 @@ Function Get-AllTenantSuccessfulLogins {
     Else {
         $tenants = $TenantsList
     }
-    $DelegatedAdminCred = Get-Credential -Message "Enter delegated administrative credentials. This will not work with MFA"
     $mergedObject = @()
 
-    foreach ($tenant in $tenants) {
-        $mergedObject += Get-TenantSuccessfulLogins -TenantDomainName $tenant.DefaultDomainName -DelegatedAdminCred $DelegatedAdminCred
+    
+    foreach  ($tenant in $tenants) {
+        $mergedObject += Get-TenantMFAUsers -TenantDomainName $tenant.DefaultDomainName 
     }
+
     return $mergedObject
 }

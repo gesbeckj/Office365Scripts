@@ -1,4 +1,4 @@
-Function Disable-AllTenantsExchangeOnlineIMAP {
+Function Get-AllTenantUserLicenses {
     [CmdletBinding()]
     param (
         [parameter(
@@ -14,17 +14,22 @@ Function Disable-AllTenantsExchangeOnlineIMAP {
         $here = $PSScriptRoot
     }
     . "$here\..\Common\Connect-Office365.ps1"
-    . "$here\..\Disable-TenantExchangeOnlineIMAP\Disable-TenantExchangeOnlineIMAP.ps1"
+    . "$here\..\Get-TenantUserLicenses\Get-TenantUserLicenses.ps1"
     if ($Null -eq $TenantsList) {
-    $session = Connect-Office365 -ConnectMSOLOnly
-    $session | out-null
-    $tenants = Get-MsolPartnerContract
+        $session = Connect-Office365 -ConnectMSOLOnly
+        $session | out-null
+        $tenants = Get-MsolPartnerContract
     }
     Else {
         $tenants = $TenantsList
     }
+    $mergedObject = @()
     $DelegatedAdminCred = Get-Credential -Message "Enter delegated administrative credentials. This will not work with MFA"
-    foreach ($tenant in $tenants) {
-        Disable-TenantExchangeOnlineIMAP -TenantDomainName $tenant.DefaultDomainName -DelegatedAdminCred $DelegatedAdminCred
+
+    
+    foreach  ($tenant in $tenants) {
+        $mergedObject += Get-TenantUserLicenses -TenantDomainName $tenant.DefaultDomainName -DelegatedAdminCred $DelegatedAdminCred -TenantID $tenant.TenantID
     }
+
+    return $mergedObject
 }
