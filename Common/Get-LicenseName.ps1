@@ -204,5 +204,5 @@ Function Get-LicenseName
          
         } 
         $userLicense = $assignedlicense
-        return $userlicense
+        return $userlicense.Substring(0,$userlicense.Length-2)
 }
