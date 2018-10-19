@@ -43,4 +43,5 @@ Function Get-ATPSummary {
         }
         $Summary += $data
     }
+    return $summary
 }

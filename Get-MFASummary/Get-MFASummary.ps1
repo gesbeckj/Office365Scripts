@@ -36,10 +36,13 @@ Function Get-MFASummary{
         {
             $MFAUsersCount  = $MFAUsers.count
         }
+        $company = Get-MsolPartnerContract -DomainName $tenant
         $data = New-Object PSObject -Property @{
-            Tenant = $Tenant
+            Tenant = $company.Name
             LicensedUsers = $LicensedUserCount
             MFAUsers = $MFAUsersCount
         }
         $Summary += $data
+}
+return $Summary
 }
