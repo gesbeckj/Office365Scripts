@@ -9,8 +9,7 @@ Function Get-AllTenantUserLicenses {
 
     if ($PSScriptRoot -eq $null) {
         $here = Split-Path -Parent $MyInvocation.MyCommand.Path
-    }
-    else {
+    } else {
         $here = $PSScriptRoot
     }
     . "$here\..\Common\Connect-Office365.ps1"
@@ -19,15 +18,14 @@ Function Get-AllTenantUserLicenses {
         $session = Connect-Office365 -ConnectMSOLOnly
         $session | out-null
         $tenants = Get-MsolPartnerContract
-    }
-    Else {
+    } Else {
         $tenants = $TenantsList
     }
     $mergedObject = @()
     $DelegatedAdminCred = Get-Credential -Message "Enter delegated administrative credentials. This will not work with MFA"
 
     
-    foreach  ($tenant in $tenants) {
+    foreach ($tenant in $tenants) {
         $mergedObject += Get-TenantUserLicenses -TenantDomainName $tenant.DefaultDomainName -DelegatedAdminCred $DelegatedAdminCred -TenantID $tenant.TenantID
     }
 

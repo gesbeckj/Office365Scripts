@@ -9,8 +9,7 @@ Function Get-AllTenantMFAUsers {
 
     if ($PSScriptRoot -eq $null) {
         $here = Split-Path -Parent $MyInvocation.MyCommand.Path
-    }
-    else {
+    } else {
         $here = $PSScriptRoot
     }
     . "$here\..\Common\Connect-Office365.ps1"
@@ -19,14 +18,13 @@ Function Get-AllTenantMFAUsers {
         $session = Connect-Office365 -ConnectMSOLOnly
         $session | out-null
         $tenants = Get-MsolPartnerContract
-    }
-    Else {
+    } Else {
         $tenants = $TenantsList
     }
     $mergedObject = @()
 
     
-    foreach  ($tenant in $tenants) {
+    foreach ($tenant in $tenants) {
         $mergedObject += Get-TenantMFAUsers -TenantDomainName $tenant.DefaultDomainName 
     }
 

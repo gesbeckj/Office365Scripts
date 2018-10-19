@@ -6,8 +6,7 @@ Function Get-TenantAutoforwardStatus {
     )
     if ($PSScriptRoot -eq $null) {
         $here = Split-Path -Parent $MyInvocation.MyCommand.Path
-    }
-    else {
+    } else {
         $here = $PSScriptRoot
     }
     . "$here\..\Common\Connect-TenantExchangeOnline.ps1"
@@ -21,11 +20,9 @@ Function Get-TenantAutoforwardStatus {
     $ImportSession | Out-Null
     $AutoforwardRules = Get-TransportRule | Where-Object {$_.MessageTypeMatches -eq "AutoForward" -and $_.State -eq "Enabled" -and $_.Mode -eq "Enforce" -and $_.FromScope -eq "InOrganization" -and $_.SentToScope -eq "NotInOrganization" -and $_.RejectMessageEnhancedStatusCode -eq "5.7.1"}
     Remove-PSSession -Session $session
-    if($null -eq $AutoforwardRules)
-    {
+    if ($null -eq $AutoforwardRules) {
         return $false
-    }
-    else {
+    } else {
         return $true
     }
 

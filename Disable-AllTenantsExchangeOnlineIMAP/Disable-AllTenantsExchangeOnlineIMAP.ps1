@@ -9,18 +9,16 @@ Function Disable-AllTenantsExchangeOnlineIMAP {
 
     if ($PSScriptRoot -eq $null) {
         $here = Split-Path -Parent $MyInvocation.MyCommand.Path
-    }
-    else {
+    } else {
         $here = $PSScriptRoot
     }
     . "$here\..\Common\Connect-Office365.ps1"
     . "$here\..\Disable-TenantExchangeOnlineIMAP\Disable-TenantExchangeOnlineIMAP.ps1"
     if ($Null -eq $TenantsList) {
-    $session = Connect-Office365 -ConnectMSOLOnly
-    $session | out-null
-    $tenants = Get-MsolPartnerContract
-    }
-    Else {
+        $session = Connect-Office365 -ConnectMSOLOnly
+        $session | out-null
+        $tenants = Get-MsolPartnerContract
+    } Else {
         $tenants = $TenantsList
     }
     $DelegatedAdminCred = Get-Credential -Message "Enter delegated administrative credentials. This will not work with MFA"

@@ -1,5 +1,4 @@
-Function Get-MFASummary
-{
+Function Get-MFASummary{
     [CmdletBinding()]
     param (
         [parameter(

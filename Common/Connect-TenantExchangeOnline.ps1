@@ -7,8 +7,7 @@ function Connect-TenantExchangeOnline {
     #Attempt to Import the MSOnline Module
     try {
         Import-Module MSOnline
-    }
-    catch {
+    } catch {
         Write-Error "Unable to Load MSOnline Module. Try running Install-Module MSonline"
         return $null
     }

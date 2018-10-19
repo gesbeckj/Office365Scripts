@@ -7,8 +7,7 @@ Function Get-TenantUserLicenses {
     )
     if ($PSScriptRoot -eq $null) {
         $here = Split-Path -Parent $MyInvocation.MyCommand.Path
-    }
-    else {
+    } else {
         $here = $PSScriptRoot
     }
     . "$here\..\Common\Connect-TenantExchangeOnline.ps1"
@@ -27,8 +26,7 @@ Function Get-TenantUserLicenses {
     Remove-PSSession $session
     Write-Verbose "Mailbox information gathered"
     $outputData = @()
-    foreach ($mailbox in $mailboxes)
-    {
+    foreach ($mailbox in $mailboxes) {
         write-verbose $mailbox.userprincipalname
         $licenseParts = ((Get-MsolUser -UserPrincipalName $mailbox.userprincipalname -TenantId $TenantID).licenses.AccountSku.SkuPartNumber)
         $userLicense = Get-LicenseName -LicenseParts $licenseParts
@@ -37,13 +35,13 @@ Function Get-TenantUserLicenses {
         $type = $mailbox.recipienttypedetails
         $smtp = $mailbox.primarysmtpaddress 
         $data = New-Object PSObject -Property @{
-            UPN = $UPN
-            SMTP = $SMTP
-            Created = $whencreated
-            Type = $type
+            UPN       = $UPN
+            SMTP      = $SMTP
+            Created   = $whencreated
+            Type      = $type
             LastLogin = $lastlogon
-            License = $userLicense
-            Tenant = $TenantDomainName
+            License   = $userLicense
+            Tenant    = $TenantDomainName
         }
         $outputData += $data
     }

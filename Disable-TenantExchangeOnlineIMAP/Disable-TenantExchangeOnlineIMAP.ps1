@@ -6,8 +6,7 @@ Function Disable-TenantExchangeOnlineIMAP {
     )
     if ($PSScriptRoot -eq $null) {
         $here = Split-Path -Parent $MyInvocation.MyCommand.Path
-    }
-    else {
+    } else {
         $here = $PSScriptRoot
     }
 
