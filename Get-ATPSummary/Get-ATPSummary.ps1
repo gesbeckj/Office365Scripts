@@ -35,8 +35,9 @@ Function Get-ATPSummary {
         }
         $TenantID = Get-MsolPartnerContract -DomainName $Tenant| Select-Object TenantId
         $ATPLicensesOwned = (get-msolaccountsku -TenantID $tenantID.tenantID | Where-Object {$_.SkuPartNumber -eq "ATP_ENTERPRISE"}).ActiveUnits
+        $company = Get-MsolPartnerContract -DomainName $tenant
         $data = New-Object PSObject -Property @{
-            Tenant           = $Tenant
+            Tenant           = $Company.Name
             LicensedUsers    = $LicensedUserCount
             ATPUsers         = $ATPUserCount
             ATPLicensesOwned = $ATPLicensesOwned

@@ -6,14 +6,19 @@ Function Get-MFASummary{
             ValueFromPipelineByPropertyName = $true)]
         [psobject[]]$TenantsList
     )
-
+    if ($PSScriptRoot -eq $null) {
+        $here = Split-Path -Parent $MyInvocation.MyCommand.Path
+    } else {
+        $here = $PSScriptRoot
+    }
+    . "$here\..\Get-AllTenantMFAUsers\Get-AllTenantMFAUsers.ps1"
     $Allusers = Get-AllTenantMFAUsers
     $Tenants = $AllUsers.Tenant | Sort-Object -Unique
     $Summary = @()
     foreach ($tenant in $tenants)
     {
         $LicensedUsers = $AllUsers | Where-Object {$_.Tenant -eq $tenant} #| Where-Object {$_.License.length -gt 2} 
-        Write-Output $LicensedUsers.count
+        Write-Verbose $LicensedUsers.count
         $MFAUsers = $LicensedUsers | Where-Object {$_.MFAStatus -ne "Disabled"}
         if ($LicensedUsers.GetType().Name -eq "PSCustomObject")
         {

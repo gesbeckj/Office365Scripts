@@ -20,7 +20,7 @@ Function Get-TenantUserLicenses {
         Write-Error "Connection to Office 365 Failed"
         throw "Unable to Connect to Office 365"
     }
-    Import-PSSession -Session $session
+    Import-PSSession -Session $session | out-null
     Write-Verbose "Getting mailbox information....this may take some time."
     $mailboxes = get-mailbox -ResultSize Unlimited | Where-Object {$_.DisplayName -notlike "Discovery Search Mailbox"} 
     Remove-PSSession $session
@@ -34,6 +34,7 @@ Function Get-TenantUserLicenses {
         $whencreated = $mailbox.whenmailboxcreated 
         $type = $mailbox.recipienttypedetails
         $smtp = $mailbox.primarysmtpaddress 
+        $company = Get-MsolPartnerContract -DomainName $tenantDomainname
         $data = New-Object PSObject -Property @{
             UPN       = $UPN
             SMTP      = $SMTP
@@ -41,7 +42,7 @@ Function Get-TenantUserLicenses {
             Type      = $type
             LastLogin = $lastlogon
             License   = $userLicense
-            Tenant    = $TenantDomainName
+            Tenant    = $company.Name
         }
         $outputData += $data
     }

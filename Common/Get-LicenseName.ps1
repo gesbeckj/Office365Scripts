@@ -202,5 +202,9 @@ Function Get-LicenseName {
          
     } 
     $userLicense = $assignedlicense
+    if ($userLicense -eq "")
+    {
+        return ""
+    }
     return $userlicense.Substring(0, $userlicense.Length - 2)
 }
