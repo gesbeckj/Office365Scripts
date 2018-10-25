@@ -14,7 +14,7 @@ Function Get-ATPSummary {
     }
     . "$here\..\Get-AllTenantUserLicenses\Get-AllTenantUserLicenses.ps1"
 
-    $ALlusers = Get-AllTenantUserLicenses
+    $ALlusers = Get-AllTenantUserLicenses -TenantsList $TenantsList
     $Tenants = $AllUsers.Tenant | Sort-Object -Unique
     $Summary = @()
     foreach ($tenant in $tenants) {
@@ -33,11 +33,10 @@ Function Get-ATPSummary {
         } else {
             $ATPUserCount = $ATPUsers.count
         }
-        $TenantID = Get-MsolPartnerContract -DomainName $Tenant| Select-Object TenantId
+        $TenantID = Get-MsolPartnerContract | Where-Object {$_.Name -eq $tenant} | Select-Object TenantId
         $ATPLicensesOwned = (get-msolaccountsku -TenantID $tenantID.tenantID | Where-Object {$_.SkuPartNumber -eq "ATP_ENTERPRISE"}).ActiveUnits
-        $company = Get-MsolPartnerContract -DomainName $tenant
         $data = New-Object PSObject -Property @{
-            Tenant           = $Company.Name
+            Tenant           = $tenant
             LicensedUsers    = $LicensedUserCount
             ATPUsers         = $ATPUserCount
             ATPLicensesOwned = $ATPLicensesOwned
