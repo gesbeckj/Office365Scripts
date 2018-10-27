@@ -18,8 +18,9 @@ Describe "Connect-Office365" {
         function Get-Credential {
             return $cred 
         }
-        Mock -CommandName New-PSSession {return "Session"}
-        Mock -CommandName Connect-MsolService {return "Session"}
-        Connect-Office365 | Should Be $Null
+        Mock -CommandName "Import-Module" {}
+        Mock -CommandName New-PSSession {return 'Test'}
+        Mock -CommandName Connect-MsolService {}
+        Connect-Office365 | Should Be 'Test'
     }
 }
