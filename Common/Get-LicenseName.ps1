@@ -204,7 +204,9 @@ Function Get-LicenseName {
     $userLicense = $assignedlicense
     if ($userLicense -eq "")
     {
+        Write-Verbose "User has no license"
         return ""
     }
+    Write-Verbose "License name is $userLicense"
     return $userlicense.Substring(0, $userlicense.Length - 2)
 }

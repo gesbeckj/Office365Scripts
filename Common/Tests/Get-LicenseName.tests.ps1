@@ -7,7 +7,16 @@ Describe "Get-LicenseNames"{
     It "Script Should Exists" {
         (Test-Path "$here\..\Get-LicenseName.ps1") | Should Be $True
     }
-    It "Should not thrw" {
+    It "Should not throw" {
         {Get-LicenseName} | Should Not Throw
+    }
+    It "Should return license information if passed a license SKU" {
+        $licenseParts = @()
+        $licenseParts += "AAD_PREMIUM"
+        $licenseParts += "O365_Business"
+        Get-LicenseName -licenseparts $licenseParts | Should Not Be Null
+    }
+    It "Should return empty string if no license is passed in" {
+        Get-LicenseName -licenseparts $null | Should Be ""
     }
 }
