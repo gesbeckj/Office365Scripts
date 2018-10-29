@@ -5,7 +5,6 @@ Function Get-AllTenantAutoforwardStatus {
             Mandatory = $false,
             ValueFromPipelineByPropertyName = $true)]
         [psobject[]]$TenantsList
-
     )
 
     if ($PSScriptRoot -eq $null) {
