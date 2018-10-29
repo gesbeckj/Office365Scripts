@@ -21,7 +21,7 @@ Describe "Get-TenantUserLicenses" {
     function Get-Credential {
         return $cred 
     }
-    $MailboxOne = New-Object PSObject -Propert @{
+    $MailboxOne = New-Object PSObject -Property @{
         UserPrincipalName    = "Test@Contoso.com"
         whenmailboxcreated   = Get-Date
         recipienttypedetails = 'SharedMailbox'
