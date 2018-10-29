@@ -17,7 +17,7 @@ Describe "Get-TenantMFAUsers" {
         StrongAuthenticationRequirements = $strongAuth
     }
     $WeakAuth = New-Object PSObject -Property @{
-        State = "Enforced"
+        State = "Disabled"
     }
     $UserTwo = New-Object PSObject -Property @{
         Licenses    = "O365"
