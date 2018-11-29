@@ -1,11 +1,12 @@
-Function Get-AllTenantATPReport {
+Function Get-AllTenantGraphAPIData {
     [CmdletBinding()]
     param (
         [parameter(
             Mandatory = $false,
             ValueFromPipelineByPropertyName = $true)]
         [psobject[]]$TenantsList,
-        [pscredential]$DelegatedAdminCred
+        [pscredential]$DelegatedAdminCred,
+        [string]$URI
     )
 
     if ($PSScriptRoot -eq $null) {
@@ -13,13 +14,10 @@ Function Get-AllTenantATPReport {
     } else {
         $here = $PSScriptRoot
     }
-    . "$here\..\Common\Connect-Office365.ps1"
-    . "$here\..\Get-TenantATPReport\Get-TenantATPReport.ps1"
+    . "$here\..\Get-AllTenantGraphAPIData\Get-AllTenantGraphAPIData.ps1"
     if ($Null -eq $TenantsList) {
 
-        $session = Connect-Office365 -ConnectMSOLOnly
-        $session | out-null
-        $tenants = Get-MsolPartnerContract
+        $tenants = Get-AzureADContract -All $true
     } Else {
         $tenants = $TenantsList
     }
@@ -28,9 +26,7 @@ Function Get-AllTenantATPReport {
 
     $mergedObject = @()
     foreach ($tenant in $tenants) {
-        $result = Get-TenantATPReport -DelegatedAdminCred $DelegatedAdminCred -TenantDomainName $tenant.DefaultDomainName
-        $result | Add-member TenantName $Tenant.Name
-        
+        $result = Get-TenantGraphAPIData -DelegatedAdminCred $DelegatedAdminCred -Tenant $Tenant -GraphAPIURI $URI
         $mergedObject += $result
     }
     return $mergedObject

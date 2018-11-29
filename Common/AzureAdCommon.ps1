@@ -1,4 +1,4 @@
-Function ComputePassword {
+Function Compute-Password {
     $aesManaged = New-Object "System.Security.Cryptography.AesManaged"
     $aesManaged.Mode = [System.Security.Cryptography.CipherMode]::CBC
     $aesManaged.Padding = [System.Security.Cryptography.PaddingMode]::Zeros
@@ -16,7 +16,7 @@ param (
         Mandatory = $true,
         ValueFromPipelineByPropertyName = $true)]
     [psobject]$Customer,
-    [paramter(Mandator = $true)]
+    [parameter(Mandatory = $true)]
     [pscredential]$DelegatedAdminCred
 )
 
@@ -26,7 +26,7 @@ param (
     }
     if (!$graphsp) {
         Login-AzureRmAccount -Credential $DelegatedAdminCred -TenantId $customer.CustomerContextId
-        New-AzureRmADServicePrincipal -ApplicationId "00000003-0000-0000-c000-000000000000"
+        New-AzureRmADServicePrincipal -ApplicationId "00000003-0000-0000-c000-000000000000" | out-null
         $graphsp = Get-AzureADServicePrincipal -SearchString "Microsoft Graph"
     }
     return $graphsp
@@ -36,7 +36,7 @@ Function CreateAppKey($fromDate, $durationInYears, $pw) {
     $testKey = GenerateAppKey -fromDate $fromDate -durationInYears $durationInYears -pw $pw
     while ($testKey.Value -match "\+" -or $testKey.Value -match "/") {
         Write-Verbose "Secret contains + or / and may not authenticate correctly. Regenerating..." 
-        $pw = ComputePassword
+        $pw = Compute-Password
         $testKey = GenerateAppKey -fromDate $fromDate -durationInYears $durationInYears -pw $pw
     }
     Write-Verbose "Secret doesn't contain + or /. Continuing..." 
@@ -71,3 +71,4 @@ Function AddResourcePermission($requiredAccess, $exposedPermissions, $requiredAc
         $requiredAccess.ResourceAccess.Add($resourceAccess)
     }
 }
+
