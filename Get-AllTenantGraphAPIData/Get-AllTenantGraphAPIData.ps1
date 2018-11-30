@@ -14,9 +14,10 @@ Function Get-AllTenantGraphAPIData {
     } else {
         $here = $PSScriptRoot
     }
-    . "$here\..\Get-AllTenantGraphAPIData\Get-AllTenantGraphAPIData.ps1"
+    . "$here\..\Get-TenantGraphAPIData\Get-TenantGraphAPIData.ps1"
     if ($Null -eq $TenantsList) {
-
+        Import-Module AzureAD
+        Connect-AzureAd -Credential $credential
         $tenants = Get-AzureADContract -All $true
     } Else {
         $tenants = $TenantsList
