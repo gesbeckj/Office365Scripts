@@ -18,3 +18,18 @@ $Base = "https://graph.microsoft.com/beta/reports/getEmailActivityUserDetail(per
 $JSON = '$format=application/json'
 $URI = $base + $JSON
 $Mailflow = Get-AllTenantGraphAPIData -TenantsList $tenants -DelegatedAdminCred $cred -URI $uri
+
+
+
+$mergedObject = @()
+For ($i=2; $i -le 30; $i++)
+{
+    $tempDate = $date.AddDays(-$i)
+    $dateString = $tempdate.year.toString() + '-'  + $tempdate.month.tostring() + '-' + $tempdate.day.tostring()
+    $Base = "https://graph.microsoft.com/beta/reports/getTeamsUserActivityUserDetail(date=$datestring)?" 
+    $JSON = '$format=application/json'
+    $URI = $base + $JSON
+    $MailbyDate = Get-AllTenantGraphAPIData -TenantsList $tenants -DelegatedAdminCred $cred -URI $uri
+    $mergedObject += $MailbyDate
+}
+$mergedObject | export-csv c:\temp\TeamsUsage.csv -NoTypeInformation
