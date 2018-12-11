@@ -5,7 +5,8 @@ Function Get-AllTenantLicenseSummary
         [parameter(
             Mandatory = $false,
             ValueFromPipelineByPropertyName = $true)]
-        [psobject[]]$TenantsList
+        [psobject[]]$TenantsList,
+        [pscredential]$credential
     )
     if ($PSScriptRoot -eq $null) {
         $here = Split-Path -Parent $MyInvocation.MyCommand.Path
@@ -16,12 +17,12 @@ Function Get-AllTenantLicenseSummary
     . "$here\..\Common\Connect-Office365.ps1"
     . "$here\..\Common\Get-LicenseName.ps1"
     if ($Null -eq $TenantsList) {
-        $session = Connect-Office365 -ConnectMSOLOnly
+        $session = Connect-Office365 -ConnectMSOLOnly -Credential $credential
         $session | out-null
         $tenants = Get-MsolPartnerContract
     }
     else {
-        $session = Connect-Office365 -ConnectMSOLOnly
+        $session = Connect-Office365 -ConnectMSOLOnly -Credential $credential
         $session | out-null
         $tenants = $TenantsList
     }

@@ -2,7 +2,8 @@ function Connect-Office365 {
     [CmdletBinding()]
     param(
         [switch]$ConnectMSOLOnly,
-        [switch]$SkipMSOL
+        [switch]$SkipMSOL,
+        [pscredential]$Credential
     )
     Write-Verbose "ConnectMSOLOnly is $ConnectMSOLOnly"
     Write-Verbose "SkipMSOL is $SkipMSOL"
@@ -16,12 +17,14 @@ function Connect-Office365 {
     }
     Write-Verbose "MSOnline Module Loaded"
     #Get User Credentials
-    $Credential = Get-Credential
     if ($null -eq $Credential) {
-        Write-Error "No credentials entered"
-        return $null
+    $Credential = Get-Credential
+        if ($null -eq $Credential) {
+            Write-Error "No credentials entered"
+            return $null
+        }
+        Write-Verbose "Credentials entered"
     }
-    Write-Verbose "Credentials entered"
     if (-not ($SkipMSOL)) {
         Write-Verbose "Connecting to MsolService"
         Connect-MsolService -Credential $Credential
