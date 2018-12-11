@@ -53,6 +53,7 @@ Function Get-AllTenantLicenseSummary
                     Owned_Licenses = $subscriptionInfo.TotalLicenses
                     InUse_Licenses = $license.ConsumedUnits
                     UnusuedLicenses = ($license.ActiveUnits - $license.ConsumedUnits)
+                    Date = [System.DateTime]::Today
                 }
                 $mergedObject += $data
             }
