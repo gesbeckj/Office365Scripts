@@ -13,7 +13,7 @@ Function Get-MFASummary{
         $here = $PSScriptRoot
     }
     . "$here\..\Get-AllTenantMFAUsers\Get-AllTenantMFAUsers.ps1"
-    $Allusers = Get-AllTenantMFAUsers -credential $credential
+    $Allusers = Get-AllTenantMFAUsers -credential $credential -TenantsList $TenantsList
     $Tenants = $AllUsers.Tenant | Sort-Object -Unique
     $Summary = @()
     foreach ($tenant in $tenants)
