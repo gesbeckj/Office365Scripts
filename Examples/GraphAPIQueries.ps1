@@ -1,3 +1,20 @@
+$Cred = Get-Credential
+Connect-AzureAD -Credential $cred
+$Tenants = Get-AzureADContract -All $true
+
+$Base = 'https://graph.microsoft.com/beta/security/secureScores?$top=1'
+$JSON = ''
+$URI = $base + $JSON
+$SecureScore = Get-AllTenantGraphAPIData -TenantsList $tenants -DelegatedAdminCred $cred -URI $uri -verbose
+
+$base = 'https://graph.microsoft.com/beta/security/secureScoreControlProfiles'
+$JSON = ''
+$URI = $base + $JSON
+$SecureScoreControlInfo = Get-AllTenantGraphAPIData -TenantsList $tenants -DelegatedAdminCred $cred -URI $uri -verbose
+
+
+
+
 $Base = "https://graph.microsoft.com/beta/reports/getMailboxUsageDetail(period='D7')?"
 $JSON = '$format=application/json'
 $URI = $base + $JSON
