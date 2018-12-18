@@ -196,7 +196,7 @@ Function Get-LicenseName {
             $Tassignedlicense = $Sku.Item("$($license)") + "::" + $Tassignedlicense 
         } else { 
             Write-Warning -Message "user $($user) has an unrecognized license $license. Please update script." 
-            $Fassignedlicense = $Sku.Item("DEFAULT_0") + "::" + $Fassignedlicense 
+            $Fassignedlicense = "UNKNOWN" + "::" + $Fassignedlicense 
         } 
         $assignedlicense = $Tassignedlicense + $Fassignedlicense 
          
@@ -208,5 +208,11 @@ Function Get-LicenseName {
         return ""
     }
     Write-Verbose "License name is $userLicense"
+    $LicName = $userlicense.Substring(0, $userlicense.Length - 2)
+    if($null -ne $LicName){
     return $userlicense.Substring(0, $userlicense.Length - 2)
+    }
+    else {
+        return "UNKNOWN"
+    }
 }
