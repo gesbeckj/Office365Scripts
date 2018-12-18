@@ -20,7 +20,7 @@ Function Get-TenantUserLicenses {
         Write-Error "Connection to Office 365 Failed"
         throw "Unable to Connect to Office 365"
     }
-    Import-PSSession -Session $session | out-null
+    Import-PSSession -Session $session -WarningAction SilentlyContinue | out-null
     Write-Verbose "Getting mailbox information....this may take some time."
     $mailboxes = get-mailbox -ResultSize Unlimited | Where-Object {$_.DisplayName -notlike "Discovery Search Mailbox"} 
     Remove-PSSession $session
