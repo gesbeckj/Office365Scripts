@@ -17,7 +17,7 @@ Function Get-AllTenantGraphAPIData {
     . "$here\..\Get-TenantGraphAPIData\Get-TenantGraphAPIData.ps1"
     if ($Null -eq $TenantsList) {
         Import-Module AzureAD
-        Connect-AzureAd -Credential $credential
+        Connect-AzureAd -Credential $DelegatedAdminCred
         $tenants = Get-AzureADContract -All $true
     } Else {
         $tenants = $TenantsList
