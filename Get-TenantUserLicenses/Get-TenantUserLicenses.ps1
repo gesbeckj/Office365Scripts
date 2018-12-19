@@ -29,7 +29,12 @@ Function Get-TenantUserLicenses {
     $outputData = @()
     foreach ($mailbox in $mailboxes) {
         write-verbose $mailbox.userprincipalname
+        try{
         $licenseParts = ((Get-MsolUser -UserPrincipalName $mailbox.userprincipalname -TenantId $TenantID -ErrorAction ignore).licenses.AccountSku.SkuPartNumber)
+        }
+        Catch {
+            $licenseParts = $Null
+        }
         $userLicense = Get-LicenseName -LicenseParts $licenseParts
         $upn = $mailbox.userprincipalname 
         $whencreated = $mailbox.whenmailboxcreated 
