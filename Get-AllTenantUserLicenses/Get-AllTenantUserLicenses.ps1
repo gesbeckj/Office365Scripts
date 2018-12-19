@@ -32,6 +32,7 @@ Function Get-AllTenantUserLicenses {
 
     
     foreach ($tenant in $tenants) {
+        Write-Output $tenant.DefaultDomainName
         $mergedObject += Get-TenantUserLicenses -TenantDomainName $tenant.DefaultDomainName -DelegatedAdminCred $DelegatedAdminCred -TenantID $tenant.TenantID
     }
 
