@@ -48,5 +48,6 @@ Function Get-TenantUserLicenses {
         }
         $outputData += $data
     }
+    [System.GC]::Collect()
     return $outputData
 }
