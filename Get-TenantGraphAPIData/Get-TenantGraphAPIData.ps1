@@ -101,12 +101,12 @@ Function Get-TenantGraphAPIData {
     if($null -ne $body.value)
     {
     $body.value | Add-Member TenantName $Tenant.DisplayName    
-    $body.value | Add-Member Date [System.DateTime]::Today
+    #$body.value | Add-Member Date [System.DateTime]::Today
     return $body.value
     }
     else {
         $body | Add-Member TenantName $tenant.DisplayName
-        $body | Add-Member Date [System.DateTime]::Today
+        #$body | Add-Member Date [System.DateTime]::Today
         return $body
     }
 }
