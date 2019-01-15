@@ -14,7 +14,7 @@ Function Get-TenantGraphAPIData {
     }
     . "$here\..\Common\AzureAdCommon.ps1"
     $TempResults = Connect-AzureAd -Credential $DelegatedAdminCred -TenantId $Tenant.CustomerContextId 
-    #Write-Verbose "Creating Azure AD App for $((Get-AzureADTenantDetail).displayName)"
+    Write-Verbose "Creating Azure AD App for $((Get-AzureADTenantDetail).displayName)"
 
     # Check for a Microsoft Graph Service Principal. If it doesn't exist already, create it.
     $graphsp = GetOrCreateMicrosoftGraphServicePrincipal -Customer $Tenant -DelegatedAdminCred $DelegatedAdminCred
@@ -41,15 +41,15 @@ Function Get-TenantGraphAPIData {
         $pw = Compute-Password
         $fromDate = [System.DateTime]::Now
         $appKey = CreateAppKey -fromDate $fromDate -durationInYears 2 -pw $pw
-        #Write-Verbose "Creating the AAD application $applicationName"
+        Write-Verbose "Creating the AAD application $applicationName"
         $aadApplication = New-AzureADApplication -DisplayName $applicationName -RequiredResourceAccess $requiredResourcesAccess -PasswordCredentials $appKey
         # Creating the Service Principal for the application
         $servicePrincipal = New-AzureADServicePrincipal -AppId $aadApplication.AppId
-        #Write-Verbose "Assigning Permissions"
+        Write-Verbose "Assigning Permissions"
         foreach ($app in $requiredResourcesAccess) {
         
             $reqAppSP = $rsps | Where-Object {$_.appid -contains $app.ResourceAppId}
-            #Write-Verbose "Assigning Application permissions for $($reqAppSP.displayName)" 
+            Write-Verbose "Assigning Application permissions for $($reqAppSP.displayName)" 
         
             foreach ($resource in $app.ResourceAccess) {
                 if ($resource.Type -match "Role") {
@@ -57,7 +57,7 @@ Function Get-TenantGraphAPIData {
                 }
             }
         }
-        #Write-Verbose "App Created"
+        Write-Verbose "App Created"
         $client_id = $aadApplication.AppId;
         $client_secret = $appkey.Value
         $tenant_id = (Get-AzureADTenantDetail).ObjectId
@@ -71,12 +71,12 @@ Function Get-TenantGraphAPIData {
         do {
             try {
                 $response = Invoke-RestMethod -Uri $tokenEndpointUri -Body $content -Method Post -UseBasicParsing
-                #Write-Verbose "Retrieved Access Token"
+                Write-Verbose "Retrieved Access Token"
                 $access_token = $response.access_token
                 $body = $null
                 $headers = @{"Authorization" = "Bearer $access_token"}
                 $body = Invoke-RestMethod -Uri $GraphAPIURI -Headers $headers -ContentType "application/json" -method GET
-                #Write-Verbose "Retrieved Graph content"
+                Write-Verbose "Retrieved Graph content"
                 $Stoploop = $true
             }
             Catch
@@ -86,7 +86,7 @@ Function Get-TenantGraphAPIData {
                     $Stoploop = $true
                 }
                 else {
-                    #Write-Verbose "Could not get Graph content. Retrying in 5 seconds..." 
+                    Write-Verbose "Could not get Graph content. Retrying in 5 seconds..." 
                     Start-Sleep -Seconds 5
                     $Retrycount ++
                 }
