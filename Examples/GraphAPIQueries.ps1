@@ -50,3 +50,44 @@ For ($i=2; $i -le 30; $i++)
     $mergedObject += $MailbyDate
 }
 $mergedObject | export-csv c:\temp\TeamsUsage.csv -NoTypeInformation
+
+
+$tempDate = Get-Date
+$dateString = $tempdate.year.toString() + '-'  + $tempdate.month.tostring() + '-' + $tempdate.day.tostring()
+$JSON = '$format=application/json'
+$URI = $base + $JSON
+
+
+$Base = "https://graph.microsoft.com/beta/reports/getEmailActivityUserDetail(date=$datestring)?" 
+$URI = $base + $JSON
+$MailUsage = Get-AllTenantGraphAPIData -TenantsList $tenants -DelegatedAdminCred $cred -URI $uri
+$MailUsage | Export-Csv c:\temp\MailUsage.csv -NoTypeInformation
+
+$Base = "https://graph.microsoft.com/beta/reports/getEmailAppUsageUserDetail(date=$datestring)?" 
+$URI = $base + $JSON
+$MailAppUsage = Get-AllTenantGraphAPIData -TenantsList $tenants -DelegatedAdminCred $cred -URI $uri
+$MailAppUsage | Export-Csv c:\temp\MailAppUsage.csv -NoTypeInformation
+
+$Base = "https://graph.microsoft.com/beta/reports/getOffice365ActivationsUserDetail?" 
+$URI = $base + $JSON
+$OfficeInstalls = Get-AllTenantGraphAPIData -TenantsList $tenants -DelegatedAdminCred $cred -URI $uri
+$OfficeInstalls | Export-Csv c:\temp\OfficeInstalls.csv -NoTypeInformation
+
+$Base = "https://graph.microsoft.com/beta/reports/getOneDriveActivityUserDetail(date=$datestring)?" 
+$OneDriveActivity = Get-AllTenantGraphAPIData -TenantsList $tenants -DelegatedAdminCred $cred -URI $uri
+$OneDriveActivity | Export-Csv c:\temp\OneDriveActivity.csv -NoTypeInformation
+
+$Base = "https://graph.microsoft.com/beta/reports/getOneDriveUsageAccountDetail(date=$datestring)?" 
+$URI = $base + $JSON
+$OneDriveUsage = Get-AllTenantGraphAPIData -TenantsList $tenants -DelegatedAdminCred $cred -URI $uri
+$OneDriveUsage | Export-Csv c:\temp\OneDriveUsagee.csv -NoTypeInformation
+
+$Base = "https://graph.microsoft.com/beta/reports/getSharePointActivityUserDetail(date=$datestring)?" 
+$URI = $base + $JSON
+$SharePointActivit = Get-AllTenantGraphAPIData -TenantsList $tenants -DelegatedAdminCred $cred -URI $uri
+$SharePointActivit | Export-Csv c:\temp\SharePointActivit.csv -NoTypeInformation
+
+$Base = "https://graph.microsoft.com/beta/reports/getSkypeForBusinessActivityUserDetail(date=$datestring)?" 
+$URI = $base + $JSON
+$SkypeForBusinessActivity= Get-AllTenantGraphAPIData -TenantsList $tenants -DelegatedAdminCred $cred -URI $uri
+$SkypeForBusinessActivity | Export-Csv c:\temp\SkypeForBusinessActivity.csv -NoTypeInformation
