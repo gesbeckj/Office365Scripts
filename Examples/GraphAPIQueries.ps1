@@ -51,17 +51,17 @@ For ($i=2; $i -le 30; $i++)
 }
 $mergedObject | export-csv c:\temp\TeamsUsage.csv -NoTypeInformation
 
-
-$tempDate = Get-Date
-$dateString = $tempdate.year.toString() + '-'  + $tempdate.month.tostring() + '-' + $tempdate.day.tostring()
+$cred = Get-Credential
+$tempDate = Get-Date -date (Get-Date).AddDays(-2) -format "MM dd yyyy"
+$dateString = $tempdate.Substring(6,4)+ '-'  + $tempdate.Substring(0,2) + '-' + $tempdate.Substring(3,2)
 $JSON = '$format=application/json'
 $URI = $base + $JSON
 
-
+$MailUsage = @()
 $Base = "https://graph.microsoft.com/beta/reports/getEmailActivityUserDetail(date=$datestring)?" 
 $URI = $base + $JSON
 $MailUsage = Get-AllTenantGraphAPIData -TenantsList $tenants -DelegatedAdminCred $cred -URI $uri
-$MailUsage | Export-Csv c:\temp\MailUsage.csv -NoTypeInformation
+$MailUsage | Export-Csv -path c:\temp\MailUsage1.csv -NoTypeInformation
 
 $Base = "https://graph.microsoft.com/beta/reports/getEmailAppUsageUserDetail(date=$datestring)?" 
 $URI = $base + $JSON
@@ -74,6 +74,7 @@ $OfficeInstalls = Get-AllTenantGraphAPIData -TenantsList $tenants -DelegatedAdmi
 $OfficeInstalls | Export-Csv c:\temp\OfficeInstalls.csv -NoTypeInformation
 
 $Base = "https://graph.microsoft.com/beta/reports/getOneDriveActivityUserDetail(date=$datestring)?" 
+$URI = $base + $JSON
 $OneDriveActivity = Get-AllTenantGraphAPIData -TenantsList $tenants -DelegatedAdminCred $cred -URI $uri
 $OneDriveActivity | Export-Csv c:\temp\OneDriveActivity.csv -NoTypeInformation
 
@@ -91,3 +92,18 @@ $Base = "https://graph.microsoft.com/beta/reports/getSkypeForBusinessActivityUse
 $URI = $base + $JSON
 $SkypeForBusinessActivity= Get-AllTenantGraphAPIData -TenantsList $tenants -DelegatedAdminCred $cred -URI $uri
 $SkypeForBusinessActivity | Export-Csv c:\temp\SkypeForBusinessActivity.csv -NoTypeInformation
+
+$merged = @()
+foreach ($item in $data)
+{
+    $single = New-Object PSObject -Property @{
+        displayName = $item.displayName
+        EmailAddress = $item.userPrincipalName
+        SendCount = $item.sendCount
+        RecievedCount = $item.receiveCount
+        ReadCount = $item.readCount
+        Tenant    = $item.TenantName
+        Date = $item.reportRefreshDate
+    }
+$merged += $single
+}
