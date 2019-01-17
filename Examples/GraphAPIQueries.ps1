@@ -52,7 +52,7 @@ For ($i=2; $i -le 30; $i++)
 $mergedObject | export-csv c:\temp\TeamsUsage.csv -NoTypeInformation
 
 $cred = Get-Credential
-$tempDate = Get-Date -date (Get-Date).AddDays(-2) -format "MM dd yyyy"
+$tempDate = Get-Date -date (Get-Date).AddDays(-1) -format "MM dd yyyy"
 $dateString = $tempdate.Substring(6,4)+ '-'  + $tempdate.Substring(0,2) + '-' + $tempdate.Substring(3,2)
 $JSON = '$format=application/json'
 $URI = $base + $JSON
@@ -83,6 +83,23 @@ $URI = $base + $JSON
 $OneDriveUsage = Get-AllTenantGraphAPIData -TenantsList $tenants -DelegatedAdminCred $cred -URI $uri
 $OneDriveUsage | Export-Csv c:\temp\OneDriveUsagee.csv -NoTypeInformation
 
+$All = @()
+foreach ($item in $OneDriveUsage)
+{
+    $single = New-Object PSObject -Property @{
+        Displayname = $item.ownerDisplayName
+        TotalSize = $item.storageAllocatedInBytes
+        UsedSize = $item.storageUsedInBytes
+        FileCount = $item.fileCount
+        Date = $item.reportRefreshDate
+        LastActivity = $item.lastActivityDate
+        ActiveFileCount = $item.activeFileCount
+        Tenant = $TenantName
+    }
+$all += $single
+}
+$test = $OneDriveUsage | Where {$_.TenantName -ne $null}
+
 $Base = "https://graph.microsoft.com/beta/reports/getSharePointActivityUserDetail(date=$datestring)?" 
 $URI = $base + $JSON
 $SharePointActivit = Get-AllTenantGraphAPIData -TenantsList $tenants -DelegatedAdminCred $cred -URI $uri
@@ -107,3 +124,15 @@ foreach ($item in $data)
     }
 $merged += $single
 }
+
+$uri1 = 'https://graph.microsoft.com/beta/reports/getOneDriveUsageAccountDetail(period=''D7'')?$format=application/json'
+
+$Results = Get-TenantGraphAPIData -Tenant $SW -DelegatedAdminCred $cred -GraphAPIURI $URI1
+
+#ALLTENANT USERS
+$users = Get-AllTenantAllUsers
+$users = Get-AllTenantAllUsers -Credential $cred
+$users | where {$_.usertype -neq "guest" -and $_.isLicensed -eq $true}
+
+$licenseParts = ((Get-MsolUser -UserPrincipalName $mailbox.userprincipalname -TenantId $TenantID -ErrorAction ignore).licenses.AccountSku.SkuPartNumber)
+        $userLicense = Get-LicenseName -LicenseParts $licenseParts
