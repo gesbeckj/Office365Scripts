@@ -136,3 +136,18 @@ $users | where {$_.usertype -neq "guest" -and $_.isLicensed -eq $true}
 
 $licenseParts = ((Get-MsolUser -UserPrincipalName $mailbox.userprincipalname -TenantId $TenantID -ErrorAction ignore).licenses.AccountSku.SkuPartNumber)
         $userLicense = Get-LicenseName -LicenseParts $licenseParts
+
+
+        CREATE TABLE [dbo].[UserDetails] (
+[TenantName] varchar(100),
+[MFAStatus] varchar(20),
+[userLicense] varchar(250),
+[DisplayName] varchar(100),
+[FirstName] varchar(50),
+[LastName] varchar(100),
+[LastPasswordChangeTimestamp] datetime,
+[PasswordNeverExpires] bit,
+[UserPrincipalName] varchar(100),
+[WhenCreated] datetime,
+[date] datetime
+)
