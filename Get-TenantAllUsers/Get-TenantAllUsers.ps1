@@ -8,7 +8,8 @@ Function Get-TenantAllUsers {
     } else {
         $here = $PSScriptRoot
     }
-    $TenantID = Get-MsolPartnerContract -DomainName $TenantDomainName | Select-Object TenantId
+    $TenantID = Get-MsolPartnerContract -DomainName $TenantDomainName 
     $Users = get-msoluser -all -TenantId $TenantID.TenantID
+    $Users | Add-member TenantName $TenantID.Name
     return $Users
 }
