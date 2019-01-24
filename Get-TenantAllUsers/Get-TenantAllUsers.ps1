@@ -10,6 +10,6 @@ Function Get-TenantAllUsers {
     }
     $TenantID = Get-MsolPartnerContract -DomainName $TenantDomainName 
     $Users = get-msoluser -all -TenantId $TenantID.TenantID
-    $Users | Add-member TenantName $TenantID.Name
+    $Users | Add-member Tenant $TenantID.Name
     return $Users
 }
