@@ -39,7 +39,7 @@ Function Get-AllTenantAllUsers {
         }
         else {
             
-                $MFAStatus = 'DISABLED'
+                $MFAStatus = 'Disabled'
             
         }
         $object | add-member MFAStatus $MFAStatus
