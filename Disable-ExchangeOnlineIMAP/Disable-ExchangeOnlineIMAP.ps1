@@ -13,7 +13,7 @@ Import-PSSession -Session $session
 Get-CASMailboxPlan -Filter 'ImapEnabled -eq "true" -or PopEnabled -eq "true" ' | set-CASMailboxPlan -ImapEnabled $false -PopEnabled $false
 
 #Verify this was successful.
-$Results = Get-CASMailboxPlan -Filter '{ImapEnabled -eq "true" -or PopEnabled -eq "true"'
+$Results = Get-CASMailboxPlan -Filter 'ImapEnabled -eq "true" -or PopEnabled -eq "true"'
 if ($null -ne $Results) {
     Throw "Unable to Disable IMAP and POP in CAS Mailbox Plans"
 }
