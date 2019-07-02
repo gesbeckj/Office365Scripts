@@ -176,7 +176,7 @@ Function Get-LicenseName {
         SWAY                               = 'SWAY'
         VIDEO_INTEROP                      = 'Polycom Skype Meeting Video Interop for Skype for Business'
         VISIO_CLIENT_SUBSCRIPTION          = 'MS O365 Subscription - Visio Online Plan 2'
-        VISIOCLIENT                        = 'MS O365 Subscription - Visio Pro'
+        VISIOCLIENT                        = 'MS O365 Subscription - Visio Online Plan 2'
         VISIOONLINE_PLAN1                  = 'MS O365 Subscription - Visio Online Plan 1'
         WACONEDRIVEENTERPRISE              = 'OneDrive for Business (Plan 2)'
         WACONEDRIVESTANDARD                = 'OneDrive Pack'
