@@ -80,7 +80,7 @@ Function Get-LicenseName {
         MCOEV                              = 'Skype for Business Cloud PBX'
         MCOIMP                             = 'MS O365 Subscription - Skype for Business Plan 1'
         MCOLITE                            = 'MS O365 Subscription - Skype for Business Plan 1'
-        MCOMEETADV                         = 'Skype for Business PSTN Conferencing'
+        MCOMEETADV                         = 'MS O365 Subscription - Skype for Business PSTN'
         MCOPLUSCAL                         = 'Skype for Business Plus CAL'
         MCOPSTN1                           = 'MS O365 Subscription - Domestic Calling Plan'
         MCOPSTN2                           = 'Skype for Business PSTN Domestic and International Calling plan'
