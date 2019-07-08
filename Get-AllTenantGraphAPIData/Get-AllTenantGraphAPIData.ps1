@@ -6,7 +6,9 @@ Function Get-AllTenantGraphAPIData {
             ValueFromPipelineByPropertyName = $true)]
         [psobject[]]$TenantsList,
         [pscredential]$DelegatedAdminCred,
-        [string]$URI
+        [string]$URI,
+        [string]$refreshToken,
+        [string]$tenantID
     )
 
     if ($PSScriptRoot -eq $null) {
@@ -17,7 +19,9 @@ Function Get-AllTenantGraphAPIData {
     . "$here\..\Get-TenantGraphAPIData\Get-TenantGraphAPIData.ps1"
     if ($Null -eq $TenantsList) {
         Import-Module AzureAD
-        $TempResult = Connect-AzureAd -Credential $DelegatedAdminCred
+        $azureToken = New-PartnerAccessToken -RefreshToken $refreshToken -Resource https://management.azure.com/ -Credential $credential -TenantId $tenantID
+        $graphToken =  New-PartnerAccessToken -RefreshToken $refreshToken -Resource https://graph.microsoft.com -Credential $credential -TenantId $tenantID
+        $TempResult = Connect-AzureRmAccount -AccessToken $azureToken.AccessToken -GraphAccessToken $graphToken.AccessToken -TenantId $tenantID
         $tenants = Get-AzureADContract -All $true
     } Else {
         $tenants = $TenantsList
@@ -27,7 +31,7 @@ Function Get-AllTenantGraphAPIData {
 
     $mergedObject = @()
     foreach ($tenant in $tenants) {
-        $result = Get-TenantGraphAPIData -DelegatedAdminCred $DelegatedAdminCred -Tenant $Tenant -GraphAPIURI $URI
+        $result = Get-TenantGraphAPIData -DelegatedAdminCred $DelegatedAdminCred -Tenant $Tenant -GraphAPIURI $URI -TenantId $tenantID -RefreshToken $refreshToken
         $mergedObject += $result
     }
     return $mergedObject

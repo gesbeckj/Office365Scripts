@@ -3,7 +3,9 @@ Function Get-TenantGraphAPIData {
     param (
         [psobject]$Tenant,
         [pscredential]$DelegatedAdminCred,
-        [string]$GraphAPIURI
+        [string]$GraphAPIURI,
+        [string]$refreshToken,
+        [string]$tenantID
     )
     $ApplicationName = "GraphAPIQuery"
     $ApplicationPermissions = "Directory.Read.All SecurityEvents.Read.All Reports.Read.All"
@@ -13,7 +15,14 @@ Function Get-TenantGraphAPIData {
         $here = $PSScriptRoot
     }
     . "$here\..\Common\AzureAdCommon.ps1"
-    $TempResults = Connect-AzureAd -Credential $DelegatedAdminCred -TenantId $Tenant.CustomerContextId 
+
+
+    $azureToken = New-PartnerAccessToken -RefreshToken $refreshToken -Resource https://management.azure.com/ -Credential $credential -TenantId $tenantID
+    $graphToken =  New-PartnerAccessToken -RefreshToken $refreshToken -Resource https://graph.microsoft.com -Credential $credential -TenantId $tenantID
+    $TempResults = Connect-AzureRmAccount -AccessToken $azureToken.AccessToken -GraphAccessToken $graphToken.AccessToken -TenantId $Tenant.CustomerContextId 
+    
+    
+    
     Write-Verbose "Creating Azure AD App for $((Get-AzureADTenantDetail).displayName)"
 
     # Check for a Microsoft Graph Service Principal. If it doesn't exist already, create it.
