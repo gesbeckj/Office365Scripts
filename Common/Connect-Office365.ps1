@@ -3,7 +3,9 @@ function Connect-Office365 {
     param(
         [switch]$ConnectMSOLOnly,
         [switch]$SkipMSOL,
-        [pscredential]$Credential
+        [pscredential]$Credential,
+        [string]$refreshToken,
+        [string]$tenantID
     )
     Write-Verbose "ConnectMSOLOnly is $ConnectMSOLOnly"
     Write-Verbose "SkipMSOL is $SkipMSOL"
@@ -27,7 +29,10 @@ function Connect-Office365 {
     }
     if (-not ($SkipMSOL)) {
         Write-Verbose "Connecting to MsolService"
-        Connect-MsolService -Credential $Credential
+        $aadGraphToken = New-PartnerAccessToken -RefreshToken $refreshToken -Resource https://graph.windows.net -Credential $credential -TenantId $tenantID
+        $graphToken =  New-PartnerAccessToken -RefreshToken $refreshToken -Resource https://graph.microsoft.com -Credential $credential -TenantId $tenantID
+        Connect-MsolService -AdGraphAccessToken $aadGraphToken.AccessToken -MsGraphAccessToken $graphToken.AccessToken
+        #Connect-MsolService -Credential $Credential
     }
     if (-not ($ConnectMSOLOnly)) {
         Write-Verbose "Creating PSSession"
