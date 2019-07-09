@@ -186,6 +186,9 @@ Function Get-LicenseName {
         YAMMER_ENTERPRISE                  = 'Yammer'
         YAMMER_ENTERPRISE_STANDALONE       = 'Yammer Enterprise'
         YAMMER_MIDSIZE                     = 'Yammer'
+        NONPROFIT_PORTAL                   = 'Non-Profit Portal'
+        SMB_APPS                           = 'Business Apps (free)'
+        ATP_ENTERPRISE_FACULTY             = 'Exchange Online Advanced Threat Protection'
     } 
     $Tassignedlicense = ""
     $Fassignedlicense = ""
