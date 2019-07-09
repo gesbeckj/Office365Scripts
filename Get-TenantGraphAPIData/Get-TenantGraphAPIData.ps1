@@ -19,7 +19,7 @@ Function Get-TenantGraphAPIData {
 
     $azureToken = New-PartnerAccessToken -RefreshToken $refreshToken -Resource https://management.azure.com/ -Credential $DelegatedAdminCred -TenantId $tenantID
     $graphToken =  New-PartnerAccessToken -RefreshToken $refreshToken -Resource https://graph.microsoft.com -Credential $DelegatedAdminCred -TenantId $tenantID
-    $TempResults = Connect-AzureRmAccount -AccessToken $azureToken.AccessToken -GraphAccessToken $graphToken.AccessToken -TenantId $Tenant.CustomerContextId 
+    $TempResults = Connect-AzureAD -AadAccessToken $aadGraphToken.AccessToken -MsAccessToken $graphToken.AccessToken -TenantId $tenantID -AccountId $tenantID
     
     
     
