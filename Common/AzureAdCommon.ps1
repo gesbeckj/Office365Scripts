@@ -25,8 +25,8 @@ param (
         $graphsp = Get-AzureADServicePrincipal -SearchString "Microsoft.Azure.AgregatorService"
     }
     if (!$graphsp) {
-        Login-AzureRmAccount -Credential $DelegatedAdminCred -TenantId $customer.CustomerContextId
-        New-AzureRmADServicePrincipal -ApplicationId "00000003-0000-0000-c000-000000000000" | out-null
+        #Login-AzureRmAccount -Credential $DelegatedAdminCred -TenantId $customer.CustomerContextId
+        New-AzureADServicePrincipal -ApplicationId "00000003-0000-0000-c000-000000000000" | out-null
         $graphsp = Get-AzureADServicePrincipal -SearchString "Microsoft Graph"
     }
     return $graphsp
