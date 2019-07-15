@@ -17,9 +17,9 @@ Function Get-TenantGraphAPIData {
     . "$here\..\Common\AzureAdCommon.ps1"
 
 
-    $aadGraphToken = New-PartnerAccessToken -RefreshToken $refreshToken -Resource https://graph.windows.net -Credential $DelegatedAdminCred -TenantId $tenantID
-    $graphToken =  New-PartnerAccessToken -RefreshToken $refreshToken -Resource https://graph.microsoft.com -Credential $DelegatedAdminCred -TenantId $tenantID 
-    $TempResults = Connect-AzureAD -AadAccessToken $aadGraphToken.AccessToken -MsAccessToken $graphToken.AccessToken -TenantId $tenantID -AccountId $tenantID
+    $aadGraphToken = New-PartnerAccessToken -RefreshToken $refreshToken -Resource https://graph.windows.net -Credential $DelegatedAdminCred -TenantId $tenant.DefaultDomainName
+    $graphToken =  New-PartnerAccessToken -RefreshToken $refreshToken -Resource https://graph.microsoft.com -Credential $DelegatedAdminCred -TenantId $tenant.DefaultDomainName
+    $TempResults = Connect-AzureAD -AadAccessToken $aadGraphToken.AccessToken -MsAccessToken $graphToken.AccessToken -TenantId $tenant.DefaultDomainName -AccountId $tenantID
     
     
     
