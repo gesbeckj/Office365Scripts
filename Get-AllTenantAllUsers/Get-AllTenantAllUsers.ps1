@@ -5,7 +5,9 @@ Function Get-AllTenantAllUsers {
             Mandatory = $false,
             ValueFromPipelineByPropertyName = $true)]
         [psobject[]]$TenantsList,
-        [pscredential]$Credential
+        [pscredential]$Credential,
+        [string]$refreshToken,
+        [string]$tenantID
     )
 
     if ($PSScriptRoot -eq $null) {
@@ -17,10 +19,12 @@ Function Get-AllTenantAllUsers {
     . "$here\..\Get-TenantALLUsers\Get-TenantALLUsers.ps1"
     . "$here\..\Common\Get-LicenseName.ps1"
     if ($Null -eq $TenantsList) {
-        $session = Connect-Office365 -ConnectMSOLOnly -credential $credential
+        $session = Connect-Office365 -ConnectMSOLOnly -Credential $credential -refreshToken $RefreshToken -tenantID $TenantID
         $session | out-null
         $tenants = Get-MsolPartnerContract
     } Else {
+        $session = Connect-Office365 -ConnectMSOLOnly -Credential $credential -refreshToken $RefreshToken -tenantID $TenantID
+        $session | out-null
         $tenants = $TenantsList
     }
     $mergedObject = @()
@@ -33,7 +37,7 @@ Function Get-AllTenantAllUsers {
     foreach ($object in $mergedObject)
     {
         $MFAStatus = ""
-        if ( $object.StrongAuthenticationRequirements.State -ne $null) 
+        if ($null -ne $object.StrongAuthenticationRequirements.State ) 
         {
             $MFAStatus = $object.StrongAuthenticationRequirements.State
         }
