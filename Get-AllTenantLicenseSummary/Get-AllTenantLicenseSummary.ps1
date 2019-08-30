@@ -47,8 +47,7 @@ Function Get-AllTenantLicenseSummary
                 }
                 else
                 {
-                    if($subscriptionInfo.OwnerObjectID -eq '47959bc5-1acd-41ae-bbe9-6ae67264de9e'){
-                    $isCSP = "True"}
+                    $isCSP = "True"
                 }
                 $data = New-Object PSObject -Property @{
                     Tenant = $Tenant.Name

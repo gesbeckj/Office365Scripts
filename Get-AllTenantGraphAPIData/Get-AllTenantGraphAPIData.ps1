@@ -21,7 +21,7 @@ Function Get-AllTenantGraphAPIData {
         Import-Module AzureAD
         $aadGraphToken = New-PartnerAccessToken -RefreshToken $refreshToken -Resource https://graph.windows.net -Credential $DelegatedAdminCred -TenantId $tenantID
         $graphToken =  New-PartnerAccessToken -RefreshToken $refreshToken -Resource https://graph.microsoft.com -Credential $DelegatedAdminCred -TenantId $tenantID 
-        Connect-AzureAD -AadAccessToken $aadGraphToken.AccessToken -MsAccessToken $graphToken.AccessToken -TenantId $tenantID -AccountId $tenantID
+        $tempresults = Connect-AzureAD -AadAccessToken $aadGraphToken.AccessToken -MsAccessToken $graphToken.AccessToken -TenantId $tenantID -AccountId $tenantID
         $tenants = Get-AzureADContract -All $true
     } Else {
         $tenants = $TenantsList
