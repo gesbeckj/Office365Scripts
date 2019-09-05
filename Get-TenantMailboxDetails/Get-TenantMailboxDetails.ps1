@@ -34,6 +34,7 @@ Function Get-TenantMailboxDetails {
         $whencreated = $mailbox.whenmailboxcreated 
         $type = $mailbox.recipienttypedetails
         $smtp = $mailbox.primarysmtpaddress 
+        $stats = $mailbox.UserPrincipalName | Get-MailboxStatistics
         Write-Verbose "E-mail address detected as $smtp"
         $statistics = get-mailboxstatistics -identity "$smtp"
         $lastlogon = $statistics.lastlogontime 
@@ -50,6 +51,8 @@ Function Get-TenantMailboxDetails {
             LastLogin = $lastlogon
             License   = $userLicense
             Tenant    = $company.name
+            ItemCount = $stats.ItemCount
+            Size = $stats.TotalItemSize.Value -replace '.*\(| bytes\).*|,' | % {'{0:N2}' -f ($_ / 1mb)}
         }
         $outputData += $data
     }
