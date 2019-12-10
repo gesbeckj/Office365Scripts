@@ -8,7 +8,7 @@ Function Get-TenantGraphAPIData {
         [string]$tenantID
     )
     $ApplicationName = "GraphAPIQuery"
-    $ApplicationPermissions = "Directory.Read.All SecurityEvents.Read.All Reports.Read.All"
+    $ApplicationPermissions = "Directory.Read.All SecurityEvents.Read.All Reports.Read.All ServiceHealth.Read"
     if ($PSScriptRoot -eq $null) {
         $here = Split-Path -Parent $MyInvocation.MyCommand.Path
     } else {
