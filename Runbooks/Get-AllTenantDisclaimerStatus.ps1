@@ -32,7 +32,7 @@ catch {
     }
 }
 
-$KeyVault = Get-AzureRmKeyVault
+$KeyVault = Get-AzureRmKeyVault -VaultName "AberdeanCSP-Vault"
 $databaseName = Get-AzureKeyVaultSecret -VaultName $keyVault.VaultName -Name 'PowerBIDatabasename'
 $sqlServerFQDN = Get-AzureKeyVaultSecret -VaultName $keyVault.VaultName -Name 'PowerBISSQLServer'
 $sqlAdministratorLogin = Get-AzureKeyVaultSecret -VaultName $keyVault.VaultName -Name 'PowerBISQLLogin'

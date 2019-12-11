@@ -29,7 +29,7 @@ catch {
     }
 }
 
-$KeyVault = Get-AzureRmKeyVault
+$KeyVault = Get-AzureRmKeyVault -VaultName "AberdeanCSP-Vault"
 $Office365UPN = Get-AzureKeyVaultSecret -VaultName $keyVault.VaultName -Name 'ExchangeUPN'
 $Office365RefreshToken = Get-AzureKeyVaultSecret -VaultName $keyVault.VaultName -Name 'ExchangeRefreshToken'
 
