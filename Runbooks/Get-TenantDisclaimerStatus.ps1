@@ -30,24 +30,8 @@ catch {
 }
 
 $KeyVault = Get-AzureRmKeyVault
-$databaseName = Get-AzureKeyVaultSecret -VaultName $keyVault.VaultName -Name 'databasename'
-$sqlServerFQDN = Get-AzureKeyVaultSecret -VaultName $keyVault.VaultName -Name 'sqlServerFQDN'
-$sqlAdministratorLogin = Get-AzureKeyVaultSecret -VaultName $keyVault.VaultName -Name 'sqlAdministratorLogin'
-$sqlAdministratorLoginPassword = Get-AzureKeyVaultSecret -VaultName $keyVault.VaultName -Name 'sqlAdministratorLoginPassword'
-$Office365UPN = Get-AzureKeyVaultSecret -VaultName $keyVault.VaultName -Name 'Office365Login'
-$Office365RefreshToken = Get-AzureKeyVaultSecret -VaultName $keyVault.VaultName -Name 'Office365LoginPassword'
-
-
-$params = @{
-    'Database' = $databaseName.SecretValueText
-    'ServerInstance' = $sqlServerFQDN.SecretValueText
-    'Username' = $sqlAdministratorLogin.SecretValueText
-    'Password' = $sqlAdministratorLoginPassword.SecretValueText
-    'OutputSqlErrors' = $true
-    'Query' = 'SELECT GETDate()'
-}
-
-
+$Office365UPN = Get-AzureKeyVaultSecret -VaultName $keyVault.VaultName -Name 'ExchangeUPN'
+$Office365RefreshToken = Get-AzureKeyVaultSecret -VaultName $keyVault.VaultName -Name 'ExchangeRefreshToken'
 
 $URI = 'https://raw.githubusercontent.com/gesbeckj/Office365Scripts/Dev/Common/Connect-Office365.ps1'
 $TempFile = $Env:Temp + '\Common\Connect-Office365.ps1'
