@@ -62,7 +62,7 @@ $mergedObject = @()
 foreach ($tenant in $tenants) {
 $params = @{"TenantDomainName"=$tenant.DefaultDomainName}
 
-$job = Start-AzureRmAutomationRunbook -Name "Get-TenantDisclaimerStatus" -AutomationAccountName "AzureAutomation" -ResourceGroupName "PowerBI" -Parameters $params
+$job = Start-AzureRmAutomationRunbook -Name "Get-TenantAutoforwardStatus" -AutomationAccountName "AzureAutomation" -ResourceGroupName "PowerBI" -Parameters $params
 
 $pollingSeconds = 5
 $maxTimeout = 10800
@@ -93,10 +93,10 @@ $params = @{
 
 $SQLQuery = "IF NOT EXISTS (SELECT * 
 FROM INFORMATION_SCHEMA.TABLES 
-WHERE TABLE_NAME = 'ExchangeOnlineDisclaimerStatus')
-CREATE TABLE [dbo].[ExchangeOnlineDisclaimerStatus] (
+WHERE TABLE_NAME = 'ExchangeOnlineAutoforwardStatus')
+CREATE TABLE [dbo].[ExchangeOnlineAutoforwardStatus] (
 [Tenant] varchar(100),
-[DisclaimerStatus] bit,
+[AutoforwardStatus] bit,
 [Date] datetime
 )"
 $params.query = $SQLQuery
@@ -108,12 +108,12 @@ $new = "''"
 foreach($item in $mergedObject)
 {
     $TenantName = $item.Tenant.replace($replace, $new)
-    $DisclaimerStatus = $item.DisclaimerStatus
+    $DisclaimerStatus = $item.AutoforwardStatus
     $Date = $item.date
     $params.Query = "
-    INSERT INTO [dbo].[ExchangeOnlineDisclaimerStatus]
+    INSERT INTO [dbo].[ExchangeOnlineAutoforwardStatus]
     ([Tenant],
-    [DisclaimerStatus],
+    [AutoforwardStatus],
     [Date])
     VALUES
     ('$TenantName',
