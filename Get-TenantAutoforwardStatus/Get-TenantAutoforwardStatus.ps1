@@ -14,8 +14,7 @@ Function Get-TenantAutoforwardStatus {
     . "$here\..\Common\Connect-Office365.ps1"
     $session = Connect-TenantExchangeOnline -TenantDomainName $TenantDomainName -UPN $UPN -ExchangeRefreshToken $ExchangeRefreshToken
     if ($null -eq $session) {
-        Write-Error "Connection to Office 365 Failed"
-        throw "Unable to Connect to Office 365"
+        return $false
     }
     $ImportSession = Import-PSSession -Session $session
     $ImportSession | Out-Null
