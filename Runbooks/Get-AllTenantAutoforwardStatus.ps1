@@ -72,15 +72,13 @@ while((IsJobTerminalState $job.Status) -eq $false -and $waitTime -lt $maxTimeout
    $waitTime += $pollingSeconds
    $job = $job | Get-AzureRmAutomationJob
 }
-
 $jobResults = $job | Get-AzureRmAutomationJobOutput | Get-AzureRmAutomationJobOutputRecord | Select-Object -ExpandProperty Value
 $data = New-Object PSObject -Property @{
     Tenant           = $tenant.Name
-    DisclaimerStatus = $jobResults.value[1]
+    AutoforwardStatus = $jobResults.value[1]
     Date = [System.DateTime]::Today
     }
     $mergedObject += $data
-Write-Output ($tenant.Name + " " + $jobResults.value[1])
 }
 $params = @{
     'Database' = $databaseName.SecretValueText

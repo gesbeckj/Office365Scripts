@@ -14,7 +14,10 @@ Function Get-TenantAutoforwardStatus {
     . "$here\..\Common\Connect-Office365.ps1"
     $session = Connect-TenantExchangeOnline -TenantDomainName $TenantDomainName -UPN $UPN -ExchangeRefreshToken $ExchangeRefreshToken
     if ($null -eq $session) {
-        return $false
+        $session = Connect-TenantExchangeOnline -TenantDomainName $TenantDomainName -UPN $UPN -ExchangeRefreshToken $ExchangeRefreshToken
+        if ($null -eq $session){
+            return $false
+        }
     }
     $ImportSession = Import-PSSession -Session $session
     $ImportSession | Out-Null

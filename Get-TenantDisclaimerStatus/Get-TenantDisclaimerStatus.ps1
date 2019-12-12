@@ -15,7 +15,10 @@ Function Get-TenantDisclaimerStatus {
     $session = Connect-TenantExchangeOnline -TenantDomainName $TenantDomainName -UPN $UPN -ExchangeRefreshToken $ExchangeRefreshToken
     if ($null -eq $session) {
         Write-Error "Connection to Office 365 Failed"
-        throw "Unable to Connect to Office 365"
+        $session = Connect-TenantExchangeOnline -TenantDomainName $TenantDomainName -UPN $UPN -ExchangeRefreshToken $ExchangeRefreshToken
+        if ($null -eq $session){
+            return $false
+        }
     }
     $ImportSession = Import-PSSession -Session $session
     $ImportSession | Out-Null
