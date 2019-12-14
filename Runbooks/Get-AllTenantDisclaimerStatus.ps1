@@ -72,7 +72,7 @@ while((IsJobTerminalState $job.Status) -eq $false -and $waitTime -lt $maxTimeout
    $waitTime += $pollingSeconds
    $job = $job | Get-AzureRmAutomationJob
 }
-
+try{
 $jobResults = $job | Get-AzureRmAutomationJobOutput | Get-AzureRmAutomationJobOutputRecord | Select-Object -ExpandProperty Value
 $data = New-Object PSObject -Property @{
     Tenant           = $tenant.Name
@@ -80,7 +80,10 @@ $data = New-Object PSObject -Property @{
     Date = [System.DateTime]::Today
     }
     $mergedObject += $data
-Write-Output ($tenant.Name + " " + $jobResults.value[1])
+}
+catch{
+    Write-Error "Unable to gather information for $($tenant.name)"
+}
 }
 $params = @{
     'Database' = $databaseName.SecretValueText
