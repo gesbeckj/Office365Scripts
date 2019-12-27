@@ -28,7 +28,7 @@ $sqlServerFQDN = Get-AzureKeyVaultSecret -VaultName $keyVault.VaultName -Name 'P
 $sqlAdministratorLogin = Get-AzureKeyVaultSecret -VaultName $keyVault.VaultName -Name 'PowerBISQLLogin'
 $sqlAdministratorLoginPassword = Get-AzureKeyVaultSecret -VaultName $keyVault.VaultName -Name 'PowerBISQLPassword'
 $ConnectwiseAPIKey = Get-AzureKeyVaultSecret -VaultName $keyVault.VaultName -Name 'ConnectwiseAPIKey'
-$ClientID = Get-AzureKeyVaultSecret -VaultName $keyVault.VaultName -Name 'ConnectwiseClientID'
+$ClientID = Get-AzureKeyVaultSecret -VaultName $keyVault.VaultName -Name 'ConnectwiseAppID'
 
 $params = @{
     'Database' = $databaseName.SecretValueText
