@@ -113,7 +113,7 @@ Function Get-LicenseName {
         POWER_BI_ADDON                     = 'Power BI for Office 365 Add-On'
         POWER_BI_INDIVIDUAL_USE            = 'Power BI Individual User'
         POWER_BI_INDIVIDUAL_USER           = 'Power BI for Office 365 Individual'
-        POWER_BI_PRO                       = 'Power BI Pro'
+        POWER_BI_PRO                       = 'MS O365 Subscription - Power BI Pro'
         POWER_BI_STANDALONE                = 'Power BI for Office 365'
         POWER_BI_STANDARD                  = 'Power BI Standard'
         POWERAPPS_INDIVIDUAL_USER          = 'Microsoft PowerApps and Logic flows'
