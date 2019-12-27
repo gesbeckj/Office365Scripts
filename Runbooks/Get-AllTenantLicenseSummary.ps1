@@ -62,13 +62,13 @@ $TempFile = $Env:Temp + '\Common\Get-LicenseName.ps1'
 Invoke-WebRequest -Uri $URI -OutFile $TempFile
 
 
-$ALLMFA = Get-AllTenantLicenseSummary -Credential $Office365Creds -RefreshToken $RefreshToken.SecretValueText -TenantID $TenantID.SecretValueText
+$licenses = Get-AllTenantLicenseSummary -Credential $Office365Creds -RefreshToken $RefreshToken.SecretValueText -TenantID $TenantID.SecretValueText
 
 #Check for Table, create if it not exist
 $SQLQuery = "IF NOT EXISTS (SELECT * 
 FROM INFORMATION_SCHEMA.TABLES 
-WHERE TABLE_NAME = 'LicenseSummary')
-CREATE TABLE [dbo].[LicenseSummary] (
+WHERE TABLE_NAME = 'Office365LicenseSummary')
+CREATE TABLE [dbo].[Office365LicenseSummary] (
 [Tenant] varchar(100),
 [Owned_Licenses] int,
 [isCSP] bit,
@@ -99,7 +99,7 @@ foreach($license in $Licenses)
 
 
     $params.Query = "
-    INSERT INTO [dbo].[LicenseSummary]
+    INSERT INTO [dbo].[Office365LicenseSummary]
     ([Tenant],
     [Owned_Licenses],
     [isCSP],
