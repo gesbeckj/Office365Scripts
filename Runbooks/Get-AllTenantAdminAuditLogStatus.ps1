@@ -28,7 +28,7 @@ catch {
         throw $ErrorMessage
     } else{
         Write-Error -Message $_.Exception
-        throw $_.Exception
+        throw $_.Exception 
     }
 }
 
