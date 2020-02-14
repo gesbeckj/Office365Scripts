@@ -28,9 +28,10 @@ function Connect-Office365 {
         Write-Verbose "Credentials entered"
     }
     if (-not ($SkipMSOL)) {
-        Write-Verbose "Connecting to MsolService"
+        Write-Warning "Connecting to MsolService"
         $aadGraphToken = New-PartnerAccessToken -ApplicationId $Credential.UserName -RefreshToken $refreshToken -Scopes 'https://graph.windows.net/.default' -ServicePrincipal -Credential $credential -Tenant $tenantID
         $graphToken =  New-PartnerAccessToken -ApplicationId $Credential.UserName -RefreshToken $refreshToken  -Scopes 'https://graph.microsoft.com/.default' -ServicePrincipal -Credential $credential -TenantId $tenantID
+        Write-Warning $aadGraphToken
         Connect-MsolService -AdGraphAccessToken $aadGraphToken.AccessToken -MsGraphAccessToken $graphToken.AccessToken
         #Connect-MsolService -Credential $Credential
     }
