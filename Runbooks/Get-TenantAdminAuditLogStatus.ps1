@@ -44,6 +44,6 @@ Write-Error "Connection to Office 365 Failed"
 throw "Unable to Connect to Office 365"
 }
 $ImportSession = Import-PSSession -Session $session | Out-Null
-$TenantAdminAuditLogStatus = Get-AdminAuditLogConfig | Select UnifiedAuditLogIngestionEnabled
+$TenantAdminAuditLogStatus = (Get-AdminAuditLogConfig).UnifiedAuditLogIngestionEnabled
 Remove-PSSession -Session $session
 return $TenantAdminAuditLogStatus
