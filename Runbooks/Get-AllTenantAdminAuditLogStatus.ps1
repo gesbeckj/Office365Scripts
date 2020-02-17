@@ -115,7 +115,7 @@ foreach($item in $mergedObject)
     $DisclaimerStatus = $item.ExchangeOnlineAdminAuditLogStatus
     $Date = $item.date
     $params.Query = "
-    INSERT INTO [dbo].[ExchangeOnlineExchangeOnlineAdminAuditLogStatus]
+    INSERT INTO [dbo].[ExchangeOnlineAdminAuditLogStatus]
     ([Tenant],
     [ExchangeOnlineAdminAuditLogStatus],
     [Date])

@@ -31,7 +31,12 @@ function Connect-Office365 {
         Write-Warning "Connecting to MsolService"
         $aadGraphToken = New-PartnerAccessToken -ApplicationId $Credential.UserName -RefreshToken $refreshToken -Scopes 'https://graph.windows.net/.default' -ServicePrincipal -Credential $credential -Tenant $tenantID
         $graphToken =  New-PartnerAccessToken -ApplicationId $Credential.UserName -RefreshToken $refreshToken  -Scopes 'https://graph.microsoft.com/.default' -ServicePrincipal -Credential $credential -TenantId $tenantID
-        Write-Warning $aadGraphToken
+        if($null -eq $aadGraphToken)
+        {
+            Write-Warning "Failed to get aadGraphToken"
+            $aadGraphToken = New-PartnerAccessToken -ApplicationId $Credential.UserName -RefreshToken $refreshToken -Scopes 'https://graph.windows.net/.default' -ServicePrincipal -Credential $credential -Tenant $tenantID
+        }
+
         Connect-MsolService -AdGraphAccessToken $aadGraphToken.AccessToken -MsGraphAccessToken $graphToken.AccessToken
         #Connect-MsolService -Credential $Credential
     }
