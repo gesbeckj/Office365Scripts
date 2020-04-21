@@ -30,6 +30,7 @@ Function Get-LicenseName {
         DYN365_FINANCIALS_TEAM_MEMBERS_SKU = 'Dynamics 365 for Team Members Business Edition'
         ECAL_SERVICES                      = 'ECAL'
         EMS                                = 'Enterprise Mobility Suite'
+        EMSPREMIUM                         = 'Enterprise Mobility Suite E5'
         ENTERPRISEPACK                     = 'Microsoft Subscription - E3'
         ENTERPRISEPACK_B_PILOT             = 'Office 365 (Enterprise Preview)'
         ENTERPRISEPACK_FACULTY             = 'Office 365 (Plan A3) for Faculty'
@@ -80,10 +81,10 @@ Function Get-LicenseName {
         MCOMEETADV                         = 'Microsoft Add On - PSTN Audio Conferencing'
         MCOPLUSCAL                         = 'Skype for Business Plus CAL'
         MCOPSTN1                           = 'Microsoft Add On - Domestic Calling Plan'
-        MCOPSTN2                           = 'Skype for Business PSTN Domestic and International Calling plan'
+        MCOPSTN2                           = 'Microsoft Add On - Domestic and International Calling Plan'
         MCOPSTNC                           = 'Skype for Business Communication Credits - None?'
         MCOPSTNPP                          = 'Skype for Business Communication Credits - Paid?'
-        MCOSTANDARD_GOV                    = 'Skype for Business (Plan G2) for Government'
+        MCOSTANDARD                        = 'Skype for Business Online (Plan 2)'
         MCOVOICECONF                       = 'Lync Online (Plan 3)'
         MCVOICECONF                        = 'Skype for Business Online (Plan 3)'
         MFA_PREMIUM                        = 'Azure Multi-Factor Authentication'
@@ -182,6 +183,14 @@ Function Get-LicenseName {
         NONPROFIT_PORTAL                   = 'Non-Profit Portal'
         SMB_APPS                           = 'Business Apps (free)'
         ATP_ENTERPRISE_FACULTY             = 'Exchange Online Advanced Threat Protection'
+        SPE_F1                             = 'Microsoft Subscription - Firstline Workers F1'
+        SPE_F3                             = 'Microsoft Subscription - Firstline Workers F3'
+        PROJECT_P1               = 'Project Plan 1'
+        EOP_ENTERPRISE            = 'Exchange Online Protection License'
+        MEETING_ROOM = 'Microsoft Add-On - Teams Meeting Room'
+        MS_TEAMS_IW = 'Microsoft Teams'
+        SPB = 'Small Premium Business'
+
     } 
     $Tassignedlicense = ""
     $Fassignedlicense = ""
