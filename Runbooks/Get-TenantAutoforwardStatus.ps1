@@ -1,5 +1,6 @@
 param (
-    [string]$TenantDomainName
+    [string]$TenantDomainName,
+    [string]$TenantName
 )
 # Ensures that any credentials apply only to the execution of this runbook
 Disable-AzureRmContextAutosave –Scope Process | Out-Null
@@ -29,6 +30,11 @@ if (!$servicePrincipalConnection)
 }
 }
 
+$databaseName = Get-AzureKeyVaultSecret -VaultName $keyVault.VaultName -Name 'PowerBIDatabasename'
+$sqlServerFQDN = Get-AzureKeyVaultSecret -VaultName $keyVault.VaultName -Name 'PowerBISQLServer'
+$sqlAdministratorLogin = Get-AzureKeyVaultSecret -VaultName $keyVault.VaultName -Name 'PowerBISQLLogin'
+$sqlAdministratorLoginPassword = Get-AzureKeyVaultSecret -VaultName $keyVault.VaultName -Name 'PowerBISQLPassword'
+
 $KeyVault = Get-AzureRmKeyVault -VaultName "AberdeanCSP-Vault"
 $Office365UPN = Get-AzureKeyVaultSecret -VaultName $keyVault.VaultName -Name 'ExchangeUPN'
 $Office365RefreshToken = Get-AzureKeyVaultSecret -VaultName $keyVault.VaultName -Name 'ExchangeRefreshToken'
@@ -46,8 +52,35 @@ throw "Unable to Connect to Office 365"
 $ImportSession = Import-PSSession -Session $session | Out-Null
 $AutoforwardRules = Get-TransportRule | Where-Object {$_.MessageTypeMatches -eq "AutoForward" -and $_.State -eq "Enabled" -and $_.Mode -eq "Enforce" -and $_.FromScope -eq "InOrganization" -and $_.SentToScope -eq "NotInOrganization" -and $_.RejectMessageEnhancedStatusCode -eq "5.7.1"}
 Remove-PSSession -Session $session
-if ($null -eq $AutoforwardRules) {
-return $false
-} else {
-return $true
+
+$params = @{
+    'Database' = $databaseName.SecretValueText
+    'ServerInstance' = $sqlServerFQDN.SecretValueText
+    'Username' = $sqlAdministratorLogin.SecretValueText
+    'Password' = $sqlAdministratorLoginPassword.SecretValueText
+    'OutputSqlErrors' = $true
+    'Query' = 'SELECT GETDate()'
 }
+$replace = "'"
+$new = "''"
+
+if ($null -eq $AutoforwardRules) {
+    $AutoforwardStatus = $false
+    } else {
+    $AutoforwardStatus = $true
+    }
+
+$TenantName = $TenantName.replace($replace, $new)
+$DisclaimerStatus = $AutoforwardStatus
+$Date = [System.DateTime]::Today
+$params.Query = "
+INSERT INTO [dbo].[ExchangeOnlineAutoforwardStatus]
+([Tenant],
+[AutoforwardStatus],
+[Date])
+VALUES
+('$TenantName',
+'$DisclaimerStatus',
+'$Date');
+GO"
+$Result = Invoke-SQLCmd @params
