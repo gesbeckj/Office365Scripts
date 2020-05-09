@@ -1,6 +1,7 @@
-    param (
-        [string]$TenantDomainName
-    )
+param (
+    [string]$TenantDomainName,
+    [string]$TenantName
+)
 # Ensures that any credentials apply only to the execution of this runbook
 Disable-AzureRmContextAutosave –Scope Process | Out-Null
 
@@ -32,6 +33,10 @@ catch {
 $KeyVault = Get-AzureRmKeyVault -VaultName "AberdeanCSP-Vault"
 $Office365UPN = Get-AzureKeyVaultSecret -VaultName $keyVault.VaultName -Name 'ExchangeUPN'
 $Office365RefreshToken = Get-AzureKeyVaultSecret -VaultName $keyVault.VaultName -Name 'ExchangeRefreshToken'
+$databaseName = Get-AzureKeyVaultSecret -VaultName $keyVault.VaultName -Name 'PowerBIDatabasename'
+$sqlServerFQDN = Get-AzureKeyVaultSecret -VaultName $keyVault.VaultName -Name 'PowerBISQLServer'
+$sqlAdministratorLogin = Get-AzureKeyVaultSecret -VaultName $keyVault.VaultName -Name 'PowerBISQLLogin'
+$sqlAdministratorLoginPassword = Get-AzureKeyVaultSecret -VaultName $keyVault.VaultName -Name 'PowerBISQLPassword'
 
 $URI = 'https://raw.githubusercontent.com/gesbeckj/Office365Scripts/Dev/Common/Connect-Office365.ps1'
 $TempFile = $Env:Temp + '\Common\Connect-Office365.ps1'
@@ -45,14 +50,44 @@ Invoke-WebRequest -Uri $URI -OutFile $TempFile
 $session = Connect-TenantExchangeOnline -TenantDomainName $TenantDomainName -UPN $Office365UPN.SecretValueText -ExchangeRefreshToken $Office365RefreshToken.SecretValueText
 if ($null -eq $session) {
     Write-Error "Connection to Office 365 Failed"
+    $session = Connect-TenantExchangeOnline -TenantDomainName $TenantDomainName -UPN $Office365UPN.SecretValueText -ExchangeRefreshToken $Office365RefreshToken.SecretValueText
+    if ($null -eq $session) {
+        Write-Error "Connection to Office 365 Failed"
+        $session = Connect-TenantExchangeOnline -TenantDomainName $TenantDomainName -UPN $Office365UPN.SecretValueText -ExchangeRefreshToken $Office365RefreshToken.SecretValueText
+        throw "Unable to Connect to Office 365"
+        }
     throw "Unable to Connect to Office 365"
-}
+    }
 $ImportSession = Import-PSSession -Session $session | Out-Null
 $DisclaimerRules = Get-TransportRule | Where-Object {$_.State -eq "Enabled" -and $_.Mode -eq "Enforce" -and $_.FromScope -eq "NotInOrganization" -and `
 $_.actions -eq "Microsoft.Exchange.MessagingPolicies.Rules.Tasks.ApplyHtmlDisclaimerAction" -and $null -eq $_.ExceptIfSenderDomainIs}
 Remove-PSSession -Session $session
 if ($null -eq $DisclaimerRules) {
-    return $false
+    $DisclaimerStatus = $false
 } else {
-    return $true
+    $DisclaimerStatus =  $true
 }
+
+$params = @{
+    'Database' = $databaseName.SecretValueText
+    'ServerInstance' = $sqlServerFQDN.SecretValueText
+    'Username' = $sqlAdministratorLogin.SecretValueText
+    'Password' = $sqlAdministratorLoginPassword.SecretValueText
+    'OutputSqlErrors' = $true
+    'Query' = 'SELECT GETDate()'
+}
+$replace = "'"
+$new = "''"
+
+$Date = [System.DateTime]::Today
+    $params.Query = "
+    INSERT INTO [dbo].[ExchangeOnlineDisclaimerStatus]
+    ([Tenant],
+    [DisclaimerStatus],
+    [Date])
+    VALUES
+    ('$TenantName',
+    '$DisclaimerStatus',
+    '$Date');
+    GO"
+    $Result = Invoke-SQLCmd @params
