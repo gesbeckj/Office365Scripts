@@ -47,10 +47,10 @@ Invoke-WebRequest -Uri $URI -OutFile $TempFile
 
 $session = Connect-TenantExchangeOnline -TenantDomainName $TenantDomainName -UPN $Office365UPN.SecretValueText -ExchangeRefreshToken $Office365RefreshToken.SecretValueText
 if ($null -eq $session) {
-Write-Error "Connection to Office 365 Failed"
+Write-Error "Connection to Office 365 Failed Attempt 1"
 $session = Connect-TenantExchangeOnline -TenantDomainName $TenantDomainName -UPN $Office365UPN.SecretValueText -ExchangeRefreshToken $Office365RefreshToken.SecretValueText
 if ($null -eq $session) {
-    Write-Error "Connection to Office 365 Failed"
+    Write-Error "Connection to Office 365 Failed Attempt 2"
     $session = Connect-TenantExchangeOnline -TenantDomainName $TenantDomainName -UPN $Office365UPN.SecretValueText -ExchangeRefreshToken $Office365RefreshToken.SecretValueText
     throw "Unable to Connect to Office 365"
     }

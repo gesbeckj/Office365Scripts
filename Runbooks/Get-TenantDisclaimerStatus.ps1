@@ -49,14 +49,18 @@ Invoke-WebRequest -Uri $URI -OutFile $TempFile
 . $TempFile
 $session = Connect-TenantExchangeOnline -TenantDomainName $TenantDomainName -UPN $Office365UPN.SecretValueText -ExchangeRefreshToken $Office365RefreshToken.SecretValueText
 if ($null -eq $session) {
-    Write-Error "Connection to Office 365 Failed"
+    Write-Error "Connection to Office 365 Failed Attempt 1"
     $session = Connect-TenantExchangeOnline -TenantDomainName $TenantDomainName -UPN $Office365UPN.SecretValueText -ExchangeRefreshToken $Office365RefreshToken.SecretValueText
     if ($null -eq $session) {
-        Write-Error "Connection to Office 365 Failed"
-                $KeyVault = Get-AzureRmKeyVault -VaultName "AberdeanCSP-Vault"
+        Write-Error "Connection to Office 365 Failed Attempt 2"
+        $KeyVault = Get-AzureRmKeyVault -VaultName "AberdeanCSP-Vault"
         $Office365UPN = Get-AzureKeyVaultSecret -VaultName $keyVault.VaultName -Name 'ExchangeUPN'
         $Office365RefreshToken = Get-AzureKeyVaultSecret -VaultName $keyVault.VaultName -Name 'ExchangeRefreshToken'
         $session = Connect-TenantExchangeOnline -TenantDomainName $TenantDomainName -UPN $Office365UPN.SecretValueText -ExchangeRefreshToken $Office365RefreshToken.SecretValueText
+        if($null -eq $session)
+        {
+            Write-Error "Connection to Office 365 Failed Attempt 3"
+        }
         }
     }
 $ImportSession = Import-PSSession -Session $session | Out-Null
