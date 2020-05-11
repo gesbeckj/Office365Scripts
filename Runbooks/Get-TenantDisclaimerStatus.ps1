@@ -53,10 +53,11 @@ if ($null -eq $session) {
     $session = Connect-TenantExchangeOnline -TenantDomainName $TenantDomainName -UPN $Office365UPN.SecretValueText -ExchangeRefreshToken $Office365RefreshToken.SecretValueText
     if ($null -eq $session) {
         Write-Error "Connection to Office 365 Failed"
+                $KeyVault = Get-AzureRmKeyVault -VaultName "AberdeanCSP-Vault"
+        $Office365UPN = Get-AzureKeyVaultSecret -VaultName $keyVault.VaultName -Name 'ExchangeUPN'
+        $Office365RefreshToken = Get-AzureKeyVaultSecret -VaultName $keyVault.VaultName -Name 'ExchangeRefreshToken'
         $session = Connect-TenantExchangeOnline -TenantDomainName $TenantDomainName -UPN $Office365UPN.SecretValueText -ExchangeRefreshToken $Office365RefreshToken.SecretValueText
-        throw "Unable to Connect to Office 365"
         }
-    throw "Unable to Connect to Office 365"
     }
 $ImportSession = Import-PSSession -Session $session | Out-Null
 $DisclaimerRules = Get-TransportRule | Where-Object {$_.State -eq "Enabled" -and $_.Mode -eq "Enforce" -and $_.FromScope -eq "NotInOrganization" -and `
