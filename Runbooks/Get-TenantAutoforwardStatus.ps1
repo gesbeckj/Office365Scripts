@@ -52,9 +52,7 @@ $session = Connect-TenantExchangeOnline -TenantDomainName $TenantDomainName -UPN
 if ($null -eq $session) {
     Write-Error "Connection to Office 365 Failed Attempt 2"
     $session = Connect-TenantExchangeOnline -TenantDomainName $TenantDomainName -UPN $Office365UPN.SecretValueText -ExchangeRefreshToken $Office365RefreshToken.SecretValueText
-    throw "Unable to Connect to Office 365"
     }
-throw "Unable to Connect to Office 365"
 }
 $ImportSession = Import-PSSession -Session $session | Out-Null
 $AutoforwardRules = Get-TransportRule | Where-Object {$_.MessageTypeMatches -eq "AutoForward" -and $_.State -eq "Enabled" -and $_.Mode -eq "Enforce" -and $_.FromScope -eq "InOrganization" -and $_.SentToScope -eq "NotInOrganization" -and $_.RejectMessageEnhancedStatusCode -eq "5.7.1"}
