@@ -77,7 +77,7 @@ Function Get-LicenseName {
         LITEPACK_P2                        = 'Office 365 Small Business Premium'
         LOCKBOX                            = 'Customer Lockbox'
         LOCKBOX_ENTERPRISE                 = 'Customer Lockbox'
-        MCOEV                              = 'Skype for Business Cloud PBX'
+        MCOEV                              = 'Microsoft Add-On - Phone System'
         MCOMEETADV                         = 'Microsoft Add On - PSTN Audio Conferencing'
         MCOPLUSCAL                         = 'Skype for Business Plus CAL'
         MCOPSTN1                           = 'Microsoft Add On - Domestic Calling Plan'
