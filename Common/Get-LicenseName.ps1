@@ -185,11 +185,11 @@ Function Get-LicenseName {
         ATP_ENTERPRISE_FACULTY             = 'Exchange Online Advanced Threat Protection'
         SPE_F1                             = 'Microsoft Subscription - Firstline Workers F1'
         SPE_F3                             = 'Microsoft Subscription - Firstline Workers F3'
-        PROJECT_P1               = 'Project Plan 1'
+        PROJECT_P1               = 'Microsoft Subscription - Project Plan 1'
         EOP_ENTERPRISE            = 'Exchange Online Protection License'
         MEETING_ROOM = 'Microsoft Add-On - Teams Meeting Room'
         MS_TEAMS_IW = 'Microsoft Teams'
-        SPB = 'Small Premium Business'
+        SPB = 'Small Premium Business - NOT IN CONNECTWISE'
 
     } 
     $Tassignedlicense = ""
