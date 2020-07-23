@@ -193,6 +193,7 @@ Function Get-LicenseName {
         BUSINESS_VOICE_MED2 = 'Microsoft Add-On - Business Voice'
         MCOPSTN9 = 'Microsoft Add On - International Calling Plan for SMB'
         MCOCAP = 'Microsoft Add On - Common Area Phone'
+        PHONESYSTEM_VIRTUALUSER = 'MS M365 Add-On - Phone System Virtual User'
     } 
     $Tassignedlicense = ""
     $Fassignedlicense = ""
