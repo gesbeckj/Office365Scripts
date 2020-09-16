@@ -189,7 +189,7 @@ Function Get-LicenseName {
         EOP_ENTERPRISE            = 'Exchange Online Protection License'
         MEETING_ROOM = 'Microsoft Add-On - Teams Meeting Room'
         MS_TEAMS_IW = 'Microsoft Teams'
-        SPB = 'Small Premium Business - NOT IN CONNECTWISE'
+        SPB = 'Microsoft Subscription - Business Premium'
         BUSINESS_VOICE_MED2 = 'Microsoft Add-On - Business Voice'
         MCOPSTN9 = 'Microsoft Add On - International Calling Plan for SMB'
         MCOCAP = 'Microsoft Add On - Common Area Phone'
