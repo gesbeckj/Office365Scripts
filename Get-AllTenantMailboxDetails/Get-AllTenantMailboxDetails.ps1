@@ -13,7 +13,7 @@ Function Get-AllTenantMailboxDetails {
         $here = $PSScriptRoot
     }
     . "$here\..\Common\Connect-Office365.ps1"
-    . "$here\..\Get-TenantMailboxDetails\Get-TenanMailboxDetails.ps1"
+    . "$here\..\Get-TenantMailboxDetails\Get-TenantMailboxDetails.ps1"
     if ($Null -eq $TenantsList) {
         $session = Connect-Office365 -ConnectMSOLOnly
         $session | out-null

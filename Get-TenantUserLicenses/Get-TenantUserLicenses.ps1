@@ -20,7 +20,9 @@ Function Get-TenantUserLicenses {
         Write-Error "Connection to Office 365 Failed"
         throw "Unable to Connect to Office 365"
     }
-    Import-PSSession -Session $session | out-null
+    $outputsession = Import-PSSession -Session $session -WarningAction Ignore
+    Write-Verbose "Connected to $TenantDomainName"
+    $outputsession | Out-Null
     Write-Verbose "Getting mailbox information....this may take some time."
     $mailboxes = get-mailbox -ResultSize Unlimited | Where-Object {$_.DisplayName -notlike "Discovery Search Mailbox"} 
     Remove-PSSession $session
@@ -28,7 +30,7 @@ Function Get-TenantUserLicenses {
     $outputData = @()
     foreach ($mailbox in $mailboxes) {
         write-verbose $mailbox.userprincipalname
-        $licenseParts = ((Get-MsolUser -UserPrincipalName $mailbox.userprincipalname -TenantId $TenantID).licenses.AccountSku.SkuPartNumber)
+        $licenseParts = ((Get-MsolUser -UserPrincipalName $mailbox.userprincipalname -TenantId $TenantID -ErrorAction ignore).licenses.AccountSku.SkuPartNumber)
         $userLicense = Get-LicenseName -LicenseParts $licenseParts
         $upn = $mailbox.userprincipalname 
         $whencreated = $mailbox.whenmailboxcreated 
@@ -46,5 +48,6 @@ Function Get-TenantUserLicenses {
         }
         $outputData += $data
     }
+    [System.GC]::Collect()
     return $outputData
 }

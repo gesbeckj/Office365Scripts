@@ -5,7 +5,10 @@ Function Get-AllTenantLicenseSummary
         [parameter(
             Mandatory = $false,
             ValueFromPipelineByPropertyName = $true)]
-        [psobject[]]$TenantsList
+        [psobject[]]$TenantsList,
+        [pscredential]$credential,
+        [string]$refreshToken,
+        [string]$tenantID
     )
     if ($PSScriptRoot -eq $null) {
         $here = Split-Path -Parent $MyInvocation.MyCommand.Path
@@ -16,12 +19,12 @@ Function Get-AllTenantLicenseSummary
     . "$here\..\Common\Connect-Office365.ps1"
     . "$here\..\Common\Get-LicenseName.ps1"
     if ($Null -eq $TenantsList) {
-        $session = Connect-Office365 -ConnectMSOLOnly
+        $session = Connect-Office365 -ConnectMSOLOnly -Credential $credential -refreshToken $RefreshToken -tenantID $TenantID
         $session | out-null
         $tenants = Get-MsolPartnerContract
     }
     else {
-        $session = Connect-Office365 -ConnectMSOLOnly
+        $session = Connect-Office365 -ConnectMSOLOnly -Credential $credential -refreshToken $RefreshToken -tenantID $TenantID
         $session | out-null
         $tenants = $TenantsList
     }
@@ -53,6 +56,7 @@ Function Get-AllTenantLicenseSummary
                     Owned_Licenses = $subscriptionInfo.TotalLicenses
                     InUse_Licenses = $license.ConsumedUnits
                     UnusuedLicenses = ($license.ActiveUnits - $license.ConsumedUnits)
+                    Date = [System.DateTime]::Today
                 }
                 $mergedObject += $data
             }

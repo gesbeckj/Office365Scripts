@@ -4,7 +4,10 @@ Function Get-AllTenantMFAUsers {
         [parameter(
             Mandatory = $false,
             ValueFromPipelineByPropertyName = $true)]
-        [psobject[]]$TenantsList
+        [psobject[]]$TenantsList,
+        [pscredential]$Credential,
+        [string]$refreshToken,
+        [string]$tenantID
     )
 
     if ($PSScriptRoot -eq $null) {
@@ -15,7 +18,7 @@ Function Get-AllTenantMFAUsers {
     . "$here\..\Common\Connect-Office365.ps1"
     . "$here\..\Get-TenantMFAUsers\Get-TenantMFAUsers.ps1"
     if ($Null -eq $TenantsList) {
-        $session = Connect-Office365 -ConnectMSOLOnly
+        $session = Connect-Office365 -ConnectMSOLOnly -credential $credential -refreshtoken $refreshToken -tenantID $tenantID
         $session | out-null
         $tenants = Get-MsolPartnerContract
     } Else {
@@ -25,7 +28,7 @@ Function Get-AllTenantMFAUsers {
 
     
     foreach ($tenant in $tenants) {
-        $mergedObject += Get-TenantMFAUsers -TenantDomainName $tenant.DefaultDomainName 
+        $mergedObject += Get-TenantMFAUsers -TenantDomainName $tenant.DefaultDomainName
     }
 
     return $mergedObject

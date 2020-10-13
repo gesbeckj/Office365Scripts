@@ -4,7 +4,10 @@ Function Get-MFASummary{
         [parameter(
             Mandatory = $false,
             ValueFromPipelineByPropertyName = $true)]
-        [psobject[]]$TenantsList
+        [psobject[]]$TenantsList,
+        [pscredential]$Credential,
+        [string]$refreshToken,
+        [string]$tenantID
     )
     if ($PSScriptRoot -eq $null) {
         $here = Split-Path -Parent $MyInvocation.MyCommand.Path
@@ -12,7 +15,7 @@ Function Get-MFASummary{
         $here = $PSScriptRoot
     }
     . "$here\..\Get-AllTenantMFAUsers\Get-AllTenantMFAUsers.ps1"
-    $Allusers = Get-AllTenantMFAUsers
+    $Allusers = Get-AllTenantMFAUsers -credential $credential -TenantsList $TenantsList -refreshtoken $refreshToken -tenantid $tenantID
     $Tenants = $AllUsers.Tenant | Sort-Object -Unique
     $Summary = @()
     foreach ($tenant in $tenants)
@@ -46,6 +49,7 @@ Function Get-MFASummary{
             Tenant = $company.Name
             LicensedUsers = $LicensedUserCount
             MFAUsers = $MFAUsersCount
+            Date = [System.DateTime]::Today
         }
         $Summary += $data
 }

@@ -4,7 +4,8 @@ Function Get-ATPSummary {
         [parameter(
             Mandatory = $false,
             ValueFromPipelineByPropertyName = $true)]
-        [psobject[]]$TenantsList
+        [psobject[]]$TenantsList,
+        [pscredential]$Credential
     )
 
     if ($PSScriptRoot -eq $null) {
@@ -14,7 +15,7 @@ Function Get-ATPSummary {
     }
     . "$here\..\Get-AllTenantUserLicenses\Get-AllTenantUserLicenses.ps1"
 
-    $ALlusers = Get-AllTenantUserLicenses -TenantsList $TenantsList
+    $ALlusers = Get-AllTenantUserLicenses -TenantsList $TenantsList -credential $Credential
     $Tenants = $AllUsers.Tenant | Sort-Object -Unique
     $Summary = @()
     foreach ($tenant in $tenants) {
@@ -40,6 +41,7 @@ Function Get-ATPSummary {
             LicensedUsers    = $LicensedUserCount
             ATPUsers         = $ATPUserCount
             ATPLicensesOwned = $ATPLicensesOwned
+            Date = [System.DateTime]::Today
         }
         $Summary += $data
     }

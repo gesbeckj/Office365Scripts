@@ -9,7 +9,7 @@ Function Get-TenantMFAUsers {
         $here = $PSScriptRoot
     }
     $TenantID = Get-MsolPartnerContract -DomainName $TenantDomainName | Select-Object TenantId
-    $UsersStatus = get-msoluser -TenantId $TenantID.TenantID | Where-Object {$_.Licenses -ne $null}| select userprincipalname, @{N = "MFAStatus"; E = { if ( $_.StrongAuthenticationRequirements.State -ne $null) {
+    $UsersStatus = get-msoluser -all -TenantId $TenantID.TenantID | Where-Object {$_.Licenses -ne $null} | select userprincipalname, @{N = "MFAStatus"; E = { if ( $_.StrongAuthenticationRequirements.State -ne $null) {
                 $_.StrongAuthenticationRequirements.State
             } else {
                 "Disabled"

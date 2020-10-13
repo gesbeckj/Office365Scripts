@@ -14,7 +14,8 @@ Describe "Get-LicenseNames"{
         $licenseParts = @()
         $licenseParts += "AAD_PREMIUM"
         $licenseParts += "O365_Business"
-        Get-LicenseName -licenseparts $licenseParts | Should Not Be Null
+        $licenseParts += "O365_Business_FAKE"
+        Get-LicenseName -licenseparts $licenseParts -Warningaction silentlycontinue | Should Not Be Null
     }
     It "Should return empty string if no license is passed in" {
         Get-LicenseName -licenseparts $null | Should Be ""

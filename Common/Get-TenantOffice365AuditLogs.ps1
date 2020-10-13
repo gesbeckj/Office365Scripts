@@ -10,10 +10,14 @@ Function Get-TenantOffice365AuditLogs {
         [string]$TenantDomainName,
         [pscredential]$DelegatedAdminCred
     )
-
+    if ($PSScriptRoot -eq $null) {
+        $here = Split-Path -Parent $MyInvocation.MyCommand.Path
+    } else {
+        $here = $PSScriptRoot
+    }
     . "$here\..\Common\Connect-TenantExchangeOnline.ps1"
     $session = Connect-TenantExchangeOnline -tenantDomainName $TenantDomainName -DelegatedAdminCred $DelegatedAdminCred
-    import-pssession $session 
+    import-pssession $session | Out-Null
     $Logs = @()
     Write-Information "Retrieving logs"
     do {
