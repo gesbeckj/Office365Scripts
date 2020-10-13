@@ -46,35 +46,31 @@ $params = @{
 
 #Download Script File
 New-Item -Name "Get-AllTenantAllUsers" -ItemType Directory -Path $Env:Temp
-$URI = 'https://raw.githubusercontent.com/gesbeckj/Office365Scripts/Dev/Get-AllTenantAllUsers/Get-AllTenantAllUsers.ps1'
+$URI = 'https://raw.githubusercontent.com/gesbeckj/Office365Scripts/master/Get-AllTenantAllUsers/Get-AllTenantAllUsers.ps1'
 $TempFile = $ENV:Temp + '\Get-AllTenantAllUsers\Get-AllTenantAllUsers.ps1'
 Invoke-WebRequest -Uri $URI -OutFile $TempFile
 . $TempFile
 New-Item -Name "Common" -ItemType Directory -Path $Env:Temp
 
-
-$URI = 'https://raw.githubusercontent.com/gesbeckj/Office365Scripts/Dev/Common/Connect-Office365.ps1'
+$URI = 'https://raw.githubusercontent.com/gesbeckj/Office365Scripts/master/Common/Connect-Office365.ps1'
 $TempFile = $Env:Temp + '\Common\Connect-Office365.ps1'
 Invoke-WebRequest -Uri $URI -OutFile $TempFile
 
-$URI = 'https://raw.githubusercontent.com/gesbeckj/Office365Scripts/Dev/Common/Connect-TenantExchangeOnline.ps1'
-$TempFile = $Env:Temp + '\Common\Connect-TenantExchangeOnline.ps1'
-Invoke-WebRequest -Uri $URI -OutFile $TempFile
-
-$URI = 'https://raw.githubusercontent.com/gesbeckj/Office365Scripts/Dev/Common/Get-LicenseName.ps1'
+$URI = 'https://raw.githubusercontent.com/gesbeckj/Office365Scripts/master/Common/Get-LicenseName.ps1'
 $TempFile = $Env:Temp + '\Common\Get-LicenseName.ps1'
 Invoke-WebRequest -Uri $URI -OutFile $TempFile
 
 New-Item -Name "Get-TenantAllUsers" -ItemType Directory -Path $Env:Temp
-$URI = 'https://raw.githubusercontent.com/gesbeckj/Office365Scripts/Dev/Get-TenantAllUsers/Get-TenantAllUsers.ps1'
+$URI = 'https://raw.githubusercontent.com/gesbeckj/Office365Scripts/master/Get-TenantAllUsers/Get-TenantAllUsers.ps1'
 $TempFile = $Env:Temp + '\Get-TenantAllUsers\Get-TenantAllUsers.ps1'
 Invoke-WebRequest -Uri $URI -OutFile $TempFile
 
 $Users = Get-AllTenantAllUsers -credential $Office365Creds -RefreshToken $RefreshToken.SecretValueText -TenantID $TenantID.SecretValueText
 
-$AllUsers = $users | where {$_.usertype -ne "guest" -and $_.isLicensed -eq $true}
+$AllUsers = $users | Where-Object {$_.usertype -ne "guest" -and $_.isLicensed -eq $true}
 
 $Tenants = $allusers.Tenant | Sort-Object -Unique
+
 $summary = @()
 foreach ($tenant in $tenants) {
     $LicensedUsers = $AllUsers | Where-Object {$_.Tenant -eq $tenant} | Where-Object {$_.userLicense.length -gt 2} 
@@ -92,13 +88,10 @@ foreach ($tenant in $tenants) {
     } else {
         $ATPUserCount = $ATPUsers.count
     }
-    #$TenantID = Get-MsolPartnerContract | Where-Object {$_.Name -eq $tenant} | Select-Object TenantId
-    #$ATPLicensesOwned = (get-msolaccountsku -TenantID $tenantID.tenantID | Where-Object {$_.SkuPartNumber -eq "ATP_ENTERPRISE"}).ActiveUnits
     $data = New-Object PSObject -Property @{
         Tenant           = $tenant
         LicensedUsers    = $LicensedUserCount
         ATPUsers         = $ATPUserCount
-     #   ATPLicensesOwned = $ATPLicensesOwned
         Date = [System.DateTime]::Today
     }
     $Summary += $data

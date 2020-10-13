@@ -44,7 +44,55 @@ $URI = 'https://raw.githubusercontent.com/gesbeckj/ConnectwiseRestAPIScripts/mas
 $TempFile = $ENV:Temp + '\Get-ConnectwiseOffice365Licenses.ps1'
 Invoke-WebRequest -Uri $URI -OutFile $TempFile
 . $TempFile
-$Licenses = Get-ConnectwiseOffice365Licenses -APIkey $ConnectwiseAPIKey.SecretValueText -ClientID $ClientID.SecretValueText
+
+
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+$APIKey = $ConnectwiseAPIKey.SecretValueText
+$ClientID = $ClientID.SecretValueText
+$headers = @()
+$headers = @{"Content-Type" = 'application/json'}
+$headers += @{"Authorization" = "Basic $APIKey"}
+$headers += @{"clientId" = "$ClientID"}
+$Params = @{
+    PageSize = 1000
+    Conditions = 'Name = "O365 Subscription" or Name = "O365 Subscription Only"'
+}
+$uri = 'https://api-na.myconnectwise.net/v4_6_release/apis/3.0/finance/agreements'
+Write-Verbose 'Getting all Office 365 Agreements'
+$O365Agreements = Invoke-RestMethod -Uri $uri -Headers $headers -Body $params
+
+$AllData = @()
+$Params = @{
+    PageSize = 1000
+    Conditions = 'Description != "O365 Back Charge" and Description != "O365 Credit"'
+}
+
+Write-Verbose 'Staring Loop Through Office 365 Agreements'
+foreach($O365Agreement in $O365Agreements)
+{
+    Write-Verbose "Agreement for $($O365Agreement.company.name)"
+    Write-Verbose "Agreement ID: $($O365Agreement.id)"
+    $AgreementID = $O365Agreement.id
+    $uri = "https://api-na.myconnectwise.net/v4_6_release/apis/3.0/finance/agreements/$AgreementID/additions"
+    Write-Verbose "Getting License Information"
+    $Licenses = Invoke-RestMethod -Uri $uri -Headers $headers -Body $params
+    foreach($license in $Licenses)
+    {
+        Write-Verbose "License found for $($license.description)"
+        $data = New-Object PSObject -Property @{
+            CompanyName = $O365Agreement.company.name
+            LicenseName = $license.description
+            Quantity = $license.Quantity
+            Price = $license.unitPrice
+            Date = [System.DateTime]::Today
+        }
+        if ($null -eq $license.cancelleddate)
+        {
+            Write-Verbose "License is active"
+            $AllData += $data
+        }
+    }
+}
 
 #Check for Table, create if it not exist
 $SQLQuery = "IF NOT EXISTS (SELECT * 
@@ -65,7 +113,7 @@ $Result = Invoke-SQLCmd @params
 $replace = "'"
 $new = "''"
 
-foreach($license in $Licenses)
+foreach($license in $AllData)
 {
     $CompanyName = $license.CompanyName.replace($replace, $new)
     $LicenseName = $license.LicenseName
