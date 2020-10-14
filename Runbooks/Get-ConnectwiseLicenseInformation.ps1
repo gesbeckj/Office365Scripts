@@ -53,16 +53,16 @@ $headers = @()
 $headers = @{"Content-Type" = 'application/json'}
 $headers += @{"Authorization" = "Basic $APIKey"}
 $headers += @{"clientId" = "$ClientID"}
-$Params = @{
+$CWParams = @{
     PageSize = 1000
     Conditions = 'Name = "O365 Subscription" or Name = "O365 Subscription Only"'
 }
 $uri = 'https://api-na.myconnectwise.net/v4_6_release/apis/3.0/finance/agreements'
 Write-Verbose 'Getting all Office 365 Agreements'
-$O365Agreements = Invoke-RestMethod -Uri $uri -Headers $headers -Body $params
+$O365Agreements = Invoke-RestMethod -Uri $uri -Headers $headers -Body $CWparams
 
 $AllData = @()
-$Params = @{
+$CWParams = @{
     PageSize = 1000
     Conditions = 'Description != "O365 Back Charge" and Description != "O365 Credit"'
 }
@@ -75,7 +75,7 @@ foreach($O365Agreement in $O365Agreements)
     $AgreementID = $O365Agreement.id
     $uri = "https://api-na.myconnectwise.net/v4_6_release/apis/3.0/finance/agreements/$AgreementID/additions"
     Write-Verbose "Getting License Information"
-    $Licenses = Invoke-RestMethod -Uri $uri -Headers $headers -Body $params
+    $Licenses = Invoke-RestMethod -Uri $uri -Headers $headers -Body $CWparams
     foreach($license in $Licenses)
     {
         Write-Verbose "License found for $($license.description)"
