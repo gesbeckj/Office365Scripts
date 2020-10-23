@@ -4,7 +4,7 @@ Function Get-LicenseName {
         [psobject[]]$licenseParts)
     $Sku = @{ 
         AAD_BASIC                          = 'Azure Active Directory Basic'
-        AAD_PREMIUM                        = 'Azure Active Directory Premium'
+        AAD_PREMIUM                        = 'MS O365 Sub - Azure AD Prem P1'
         ATA                                = 'Advanced Threat Analytics'
         ATP_ENTERPRISE                     = 'Microsoft Add-On - Advanced Threat Protection'
         BI_AZURE_P1                        = 'Power BI Reporting and Analytics'
