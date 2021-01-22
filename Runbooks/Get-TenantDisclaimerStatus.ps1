@@ -60,6 +60,7 @@ if ($null -eq $session) {
         if($null -eq $session)
         {
             Write-Error "Connection to Office 365 Failed Attempt 3"
+            throw "Unable to login"
         }
         }
     }
@@ -83,7 +84,7 @@ $params = @{
 }
 $replace = "'"
 $new = "''"
-
+$TenantName = $TenantName.replace($replace, $new)
 $Date = [System.DateTime]::Today
     $params.Query = "
     INSERT INTO [dbo].[ExchangeOnlineDisclaimerStatus]

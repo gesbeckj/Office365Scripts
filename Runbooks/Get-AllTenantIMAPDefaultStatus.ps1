@@ -60,68 +60,8 @@ $mergedObject = @()
 
     
 foreach ($tenant in $tenants) {
-$params = @{"TenantDomainName"=$tenant.DefaultDomainName}
-
+    $params = @{"TenantDomainName"=$tenant.DefaultDomainName;"TenantName"=$tenant.name}
+    Start-Sleep -seconds 10
 $job = Start-AzureRmAutomationRunbook -Name "Get-TenantIMAPDefaultStatus" -AutomationAccountName "AzureAutomation" -ResourceGroupName "PowerBI" -Parameters $params
 
-$pollingSeconds = 5
-$maxTimeout = 10800
-$waitTime = 0
-while((IsJobTerminalState $job.Status) -eq $false -and $waitTime -lt $maxTimeout) {
-   Start-Sleep -Seconds $pollingSeconds
-   $waitTime += $pollingSeconds
-   $job = $job | Get-AzureRmAutomationJob
-}
-try{
-$jobResults = $job | Get-AzureRmAutomationJobOutput | Get-AzureRmAutomationJobOutputRecord | Select-Object -ExpandProperty Value
-$data = New-Object PSObject -Property @{
-    Tenant           = $tenant.Name
-    IMAPandPOPAllowed = $jobResults.value[1]
-    Date = [System.DateTime]::Today
-    }
-    $mergedObject += $data
-}
-catch{
-    Write-Error "Unable to gather information for $($tenant.name)"
-}
-}
-$params = @{
-    'Database' = $databaseName.SecretValueText
-    'ServerInstance' = $sqlServerFQDN.SecretValueText
-    'Username' = $sqlAdministratorLogin.SecretValueText
-    'Password' = $sqlAdministratorLoginPassword.SecretValueText
-    'OutputSqlErrors' = $true
-    'Query' = 'SELECT GETDate()'
-}
-
-$SQLQuery = "IF NOT EXISTS (SELECT * 
-FROM INFORMATION_SCHEMA.TABLES 
-WHERE TABLE_NAME = 'ExchangeOnlineIMAPDefaultStatus')
-CREATE TABLE [dbo].[ExchangeOnlineIMAPDefaultStatus] (
-[Tenant] varchar(100),
-[IMAPandPOPAllowed] bit,
-[Date] datetime
-)"
-$params.query = $SQLQuery
-$Result = Invoke-SQLCmd @params
-
-$replace = "'"
-$new = "''"
-
-foreach($item in $mergedObject)
-{
-    $TenantName = $item.Tenant.replace($replace, $new)
-    $IMAPandPOPAllowed = $item.IMAPandPOPAllowed
-    $Date = $item.date
-    $params.Query = "
-    INSERT INTO [dbo].[ExchangeOnlineIMAPDefaultStatus]
-    ([Tenant],
-    [IMAPandPOPAllowed],
-    [Date])
-    VALUES
-    ('$TenantName',
-    '$IMAPandPOPAllowed',
-    '$Date');
-    GO"
-    $Result = Invoke-SQLCmd @params
 }

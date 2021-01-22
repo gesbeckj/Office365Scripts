@@ -52,6 +52,11 @@ $session = Connect-TenantExchangeOnline -TenantDomainName $TenantDomainName -UPN
 if ($null -eq $session) {
     Write-Error "Connection to Office 365 Failed Attempt 2"
     $session = Connect-TenantExchangeOnline -TenantDomainName $TenantDomainName -UPN $Office365UPN.SecretValueText -ExchangeRefreshToken $Office365RefreshToken.SecretValueText
+    if($null -eq $session)
+    {
+        Write-Error "Connection attempt has failed three times. Aborting"
+        throw "Unable to login"
+    }
     }
 }
 $ImportSession = Import-PSSession -Session $session | Out-Null
