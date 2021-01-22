@@ -76,7 +76,7 @@ $replace = "'"
 $new = "''"
 
 
-$Date = $item.date
+$Date = [System.DateTime]::Today
 $params.Query = "
 INSERT INTO [dbo].[ExchangeOnlineAdminAuditLogStatus]
 ([Tenant],
