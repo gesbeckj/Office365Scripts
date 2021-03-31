@@ -6,7 +6,7 @@ Function Get-LicenseName {
         AAD_BASIC                          = 'Azure Active Directory Basic'
         AAD_PREMIUM                        = 'MS O365 Sub - Azure AD Prem P1'
         ATA                                = 'Advanced Threat Analytics'
-        ATP_ENTERPRISE                     = 'Microsoft Add-On - Advanced Threat Protection'
+        ATP_ENTERPRISE                     = 'Microsoft Add-On - Defender for O365 Plan 1'
         BI_AZURE_P1                        = 'Power BI Reporting and Analytics'
         BI_AZURE_P2                        = 'Power BI Pro'
         CRMINSTANCE                        = 'Dynamics CRM Online Additional Production Instance'
