@@ -157,7 +157,8 @@ INSERT INTO [dbo].[ExchangeOnlineMailProtection] (
 [OrganizationId],
 [Guid],
 [OriginatingServer],
-[ObjectState]
+[ObjectState],
+[Date]
 )
 VALUES
 (
@@ -238,7 +239,8 @@ VALUES
     '$($ProtectionRecord.OrganizationId)',
     '$($ProtectionRecord.Guid)',
     '$($ProtectionRecord.OriginatingServer)',
-    '$($ProtectionRecord.ObjectState)'    
+    '$($ProtectionRecord.ObjectState)',
+    '$Date'
 );
 GO"
 
