@@ -80,7 +80,7 @@ $TenantName = $TenantName.replace($replace, $new)
 $Date = [System.DateTime]::Today
 $params.Query = "
 INSERT INTO [dbo].[ExchangeOnlineMailProtection] (
-[$TenantName],
+[TenantName],
 [PSComputerName],
 [RunspaceId],
 [PSShowComputerName],
