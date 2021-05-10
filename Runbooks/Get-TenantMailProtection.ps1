@@ -80,6 +80,7 @@ $TenantName = $TenantName.replace($replace, $new)
 $Date = [System.DateTime]::Today
 $params.Query = "
 INSERT INTO [dbo].[ExchangeOnlineMailProtection] (
+[$TenantName],
 [PSComputerName],
 [RunspaceId],
 [PSShowComputerName],
@@ -162,6 +163,7 @@ INSERT INTO [dbo].[ExchangeOnlineMailProtection] (
 )
 VALUES
 (
+    '$TenantName',
     '$($ProtectionRecord.PSComputerName)',
     '$($ProtectionRecord.RunspaceId)',
     '$($ProtectionRecord.PSShowComputerName)',
