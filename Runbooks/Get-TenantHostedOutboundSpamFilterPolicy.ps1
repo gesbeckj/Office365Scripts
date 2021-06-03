@@ -3,7 +3,7 @@ param (
     [string]$TenantName
 )
 # Ensures that any credentials apply only to the execution of this runbook
-Disable-AzureRmContextAutosave Scope Process | Out-Null
+Disable-AzureRmContextAutosave -Scope Process | Out-Null
 
 
 $connectionName = "AzureRunAsConnection"
@@ -141,6 +141,6 @@ VALUES (
 '$($Record.WhenChangedUTC)',
 '$($Record.WhenCreated)',
 '$($Record.WhenCreatedUTC)',
-'$TenantName',[Date]);
+'$TenantName','$date');
 GO"
 $Result = Invoke-SQLCmd @params
