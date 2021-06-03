@@ -62,6 +62,7 @@ if ($null -eq $session) {
     }
 }
 $ImportSession = Import-PSSession -Session $session | Out-Null
+Set-HostedContentFilterPolicy -Identity "Default" -QuarantineRetentionPeriod 30 -EndUserSpamNotificationFrequency 1 -HighConfidenceSpamAction Quarantine -PhishSpamAction MoveToJmf -HighConfidencePhishAction Quarantine -SpamAction MoveToJmf -BulkSpamAction MoveToJmf
 $ProtectionRecord = get-hostedcontentfilterpolicy
 
 Remove-PSSession -Session $session
