@@ -1,5 +1,4 @@
-
-Disable-AzureRmContextAutosave Scope Process
+Disable-AzureRmContextAutosave -Scope Process
 $ServicePrincipalConnection = Get-AutomationConnection -Name 'AzureRunAsConnection'
 Add-AzureRmAccount `
     -ServicePrincipal `
@@ -57,6 +56,14 @@ $session = Connect-Office365 -ConnectMSOLOnly -credential $Office365Creds -refre
 $session | out-null
 $tenants = Get-MsolPartnerContract
 
+$params = @{
+    'Database' = $databaseName.SecretValueText
+    'ServerInstance' = $sqlServerFQDN.SecretValueText
+    'Username' = $sqlAdministratorLogin.SecretValueText
+    'Password' = $sqlAdministratorLoginPassword.SecretValueText
+    'OutputSqlErrors' = $true
+    'Query' = 'SELECT GETDate()'
+}
 $SQLQuery = "IF NOT EXISTS (SELECT * 
 FROM INFORMATION_SCHEMA.TABLES 
 WHERE TABLE_NAME = 'HostedOutboundSpamFilterPolicy')
