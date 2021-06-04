@@ -59,7 +59,7 @@ if ($null -eq $session) {
     }
 }
 $ImportSession = Import-PSSession -Session $session | Out-Null
-$Record = Get-AntiPhishPolicy
+$Records = Get-AntiPhishPolicy
 Remove-PSSession -Session $session
 
 $params = @{
@@ -74,6 +74,9 @@ $replace = "'"
 $new = "''"
 $TenantName = $TenantName.replace($replace, $new)
 $Date = [System.DateTime]::Today
+
+foreach($record in $records)
+{
 $params.Query = "
 INSERT INTO [dbo].[AntiPhishPolicy] (
 [AdminDisplayName],
@@ -185,3 +188,4 @@ VALUES (
 '$TenantName','$Date');
 GO"
 $Result = Invoke-SQLCmd @params
+}
