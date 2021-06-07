@@ -57,8 +57,8 @@ $params = @{
 }
 $SQLQuery = "IF NOT EXISTS (SELECT * 
 FROM INFORMATION_SCHEMA.TABLES 
-WHERE TABLE_NAME = 'EXOMailbox | Get')
-CREATE TABLE [dbo].[EXOMailbox | Get](
+WHERE TABLE_NAME = 'EXOMailboxStatistics')
+CREATE TABLE [dbo].[EXOMailboxStatistics](
 [Tenant] varchar(100),[Date] datetime)"
 $params.query = $SQLQuery
 $Result = Invoke-SQLCmd @params
