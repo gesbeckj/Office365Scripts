@@ -59,7 +59,7 @@ $SQLQuery = "IF NOT EXISTS (SELECT *
 FROM INFORMATION_SCHEMA.TABLES 
 WHERE TABLE_NAME = 'QuarantineMessage')
 CREATE TABLE [dbo].[QuarantineMessage](
-[CustomData] X,
+[CustomData] varchar(MAX),
 [DeletedForRecipients] varchar(MAX),
 [Direction] varchar(MAX),
 [Expires] datetime,
