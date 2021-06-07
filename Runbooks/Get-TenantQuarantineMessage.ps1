@@ -72,10 +72,10 @@ $params = @{
 }
 $replace = "'"
 $new = "''"
-foreach($record in $records)
-{
 $TenantName = $TenantName.replace($replace, $new)
 $Date = [System.DateTime]::Today
+foreach($record in $records)
+{
 $params.Query = "
 INSERT INTO [dbo].[QuarantineMessage] (
 [CustomData],
