@@ -72,7 +72,7 @@ Invoke-WebRequest -Uri $URI -OutFile $TempFile
 
 $Users = Get-AllTenantAllUsers -credential $Office365Creds -RefreshToken $RefreshToken.SecretValueText -TenantID $TenantID.SecretValueText
 
-$AllUsers = $users | where {$_.usertype -ne "guest" -and $_.isLicensed -eq $true}
+$AllUsers = $users | where {$_.usertype -ne "guest"}
 
 
 #Check for Table, create if it not exist
