@@ -77,6 +77,7 @@ $Date = [System.DateTime]::Today
 
 foreach($record in $records)
 {
+$record.TargetedUsersToProtect = $record.TargetedUsersToProtect.replace($replace,$new)
 $params.Query = "
 INSERT INTO [dbo].[AntiPhishPolicy] (
 [AdminDisplayName],
