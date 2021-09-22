@@ -66,7 +66,7 @@ if ($null -eq $session) {
     }
 $ImportSession = Import-PSSession -Session $session | Out-Null
 $DisclaimerRules = Get-TransportRule | Where-Object {$_.State -eq "Enabled" -and $_.Mode -eq "Enforce" -and $_.FromScope -eq "NotInOrganization" -and `
-$_.actions -eq "Microsoft.Exchange.MessagingPolicies.Rules.Tasks.ApplyHtmlDisclaimerAction" -and $null -eq $_.ExceptIfSenderDomainIs}
+$_.actions -eq "Microsoft.Exchange.MessagingPolicies.Rules.Tasks.ApplyHtmlDisclaimerAction"}
 Remove-PSSession -Session $session
 if ($null -eq $DisclaimerRules) {
     $DisclaimerStatus = $false
