@@ -60,7 +60,7 @@ if ($null -eq $session) {
         }
         }
     }
-$ImportSession = Import-PSSession -Session $session | Out-Null
+$ImportSession = Import-PSSession -Session $session -AllowClobber | Out-Null
 $TenantAdminAuditLogStatus = (Get-AdminAuditLogConfig).UnifiedAuditLogIngestionEnabled
 Remove-PSSession -Session $session
 
