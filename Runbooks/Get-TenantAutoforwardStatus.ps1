@@ -59,7 +59,7 @@ if ($null -eq $session) {
     }
     }
 }
-$ImportSession = Import-PSSession -Session $session | Out-Null
+$ImportSession = Import-PSSession -Session $session -AllowClobber | Out-Null
 $AutoforwardRules = Get-TransportRule | Where-Object {$_.MessageTypeMatches -eq "AutoForward" -and $_.State -eq "Enabled" -and $_.Mode -eq "Enforce" -and $_.FromScope -eq "InOrganization" -and $_.SentToScope -eq "NotInOrganization" -and $_.RejectMessageEnhancedStatusCode -eq "5.7.1"}
 Remove-PSSession -Session $session
 
