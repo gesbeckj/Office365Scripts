@@ -22,7 +22,7 @@ catch {
     }
 }
 
-$KeyVault = Get-AzureRmKeyVault -VaultName "AberdeanCSP-Vault"
+$KeyVault = Get-AzureRmKeyVault -VaultName "IntegrationSandbox-Vault"
 $databaseName = Get-AzureKeyVaultSecret -VaultName $keyVault.VaultName -Name 'PowerBIDatabasename'
 $sqlServerFQDN = Get-AzureKeyVaultSecret -VaultName $keyVault.VaultName -Name 'PowerBISQLServer'
 $sqlAdministratorLogin = Get-AzureKeyVaultSecret -VaultName $keyVault.VaultName -Name 'PowerBISQLLogin'
