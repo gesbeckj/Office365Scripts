@@ -79,6 +79,10 @@ foreach($O365Agreement in $O365Agreements)
     foreach($license in $Licenses)
     {
         Write-Verbose "License found for $($license.description)"
+        if($license.product.identifier.StartsWith("AC") -or $license.product.identifier.StartsWith("MC"))
+        {
+            $license.description = $license.product.identifier
+        }
         $data = New-Object PSObject -Property @{
             CompanyName = $O365Agreement.company.name
             LicenseName = $license.description
