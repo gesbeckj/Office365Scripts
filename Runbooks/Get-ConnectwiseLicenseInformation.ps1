@@ -79,6 +79,10 @@ foreach($O365Agreement in $O365Agreements)
     foreach($license in $Licenses)
     {
         Write-Verbose "License found for $($license.description)"
+        if($license.product.identifier.StartsWith("AC") -or $license.product.identifier.StartsWith("MC"))
+        {
+            $license.description = $license.product.identifier
+        }
         $data = New-Object PSObject -Property @{
             CompanyName = $O365Agreement.company.name
             LicenseName = $license.description
@@ -104,6 +108,13 @@ CREATE TABLE [dbo].[ConnectwiseOffice365Licenses] (
 [LicenseName] varchar(100),
 [CompanyName] varchar(100)
 )"
+$params.query = $SQLQuery
+$Result = Invoke-SQLCmd @params
+
+#Clear Data
+$SQLQuery = "delete
+  FROM [dbo].[ConnectwiseOffice365Licenses]
+  where [date] = CAST( GETDATE() AS Date )"
 $params.query = $SQLQuery
 $Result = Invoke-SQLCmd @params
 
