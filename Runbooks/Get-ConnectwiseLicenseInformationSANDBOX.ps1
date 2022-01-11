@@ -111,6 +111,13 @@ CREATE TABLE [dbo].[ConnectwiseOffice365Licenses] (
 $params.query = $SQLQuery
 $Result = Invoke-SQLCmd @params
 
+#Clear Data
+$SQLQuery = "delete
+  FROM [dbo].[ConnectwiseOffice365Licenses]
+  where [date] = CAST( GETDATE() AS Date )"
+$params.query = $SQLQuery
+$Result = Invoke-SQLCmd @params
+
 #EmptyTableBeforeAddingData
 #$params.Query = "DELETE FROM [dbo].[ConnectwiseOffice365Licenses]"
 #$Result = Invoke-SQLCmd @params
