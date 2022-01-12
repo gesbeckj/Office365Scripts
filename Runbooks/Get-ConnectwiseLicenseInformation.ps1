@@ -55,7 +55,7 @@ $headers += @{"Authorization" = "Basic $APIKey"}
 $headers += @{"clientId" = "$ClientID"}
 $CWParams = @{
     PageSize = 1000
-    Conditions = 'Name = "O365 Subscription" or Name = "O365 Subscription Only"'
+    Conditions = 'Name = "O365 Subscription" or Name = "O365 Subscription Only" or Name = "O365 Subscription Old" or Name = "O365 Legacy Subscription"'
 }
 $uri = 'https://api-na.myconnectwise.net/v4_6_release/apis/3.0/finance/agreements'
 Write-Verbose 'Getting all Office 365 Agreements'
