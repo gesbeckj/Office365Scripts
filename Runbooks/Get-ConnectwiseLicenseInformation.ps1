@@ -60,7 +60,7 @@ $CWParams = @{
 $uri = 'https://api-na.myconnectwise.net/v4_6_release/apis/3.0/finance/agreements'
 Write-Verbose 'Getting all Office 365 Agreements'
 $O365Agreements = Invoke-RestMethod -Uri $uri -Headers $headers -Body $CWparams
-
+$O365Agreements = $O365Agreements | Where {$_.agreementStatus -eq "Active"}
 $AllData = @()
 $CWParams = @{
     PageSize = 1000
