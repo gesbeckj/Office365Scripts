@@ -74,7 +74,7 @@ $Tenants = $allusers.Tenant | Sort-Object -Unique
 $summary = @()
 foreach ($tenant in $tenants) {
     $LicensedUsers = $AllUsers | Where-Object {$_.Tenant -eq $tenant} | Where-Object {$_.userLicense.length -gt 2} 
-    $ATPUsers = $LicensedUsers | Where-Object {$_.userLicense -like "*Advanced Threat*"}
+    $ATPUsers = $LicensedUsers | Where-Object {$_.userLicense -like "*Advanced Threat*" -or $_.userLicense -like "*Business Premium*"}
     if ($LicensedUsers.GetType().Name -eq "PSCustomObject") {
         $LicensedUserCount = 1
     } else {
