@@ -62,6 +62,6 @@ $mergedObject = @()
 foreach ($tenant in $tenants) {
 $params = @{"TenantDomainName"=$tenant.DefaultDomainName;"TenantName"=$tenant.name}
 Start-Sleep -seconds 10
-$job = Start-AzureRmAutomationRunbook -Name "Get-TenantAutoforwardStatus" -AutomationAccountName "AzureAutomation" -ResourceGroupName "PowerBI" -Parameters $params
+$job = Start-AzureRmAutomationRunbook -Name "Get-TenantAutoforwardStatus" -AutomationAccountName "AzureAutomation" -ResourceGroupName "AberdeanPowerBI" -Parameters $params
 
 }
