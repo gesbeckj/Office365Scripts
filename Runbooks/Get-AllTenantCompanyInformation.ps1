@@ -224,3 +224,4 @@ VALUES (
 GO"
 $Result = Invoke-SQLCmd @params
 }
+}
