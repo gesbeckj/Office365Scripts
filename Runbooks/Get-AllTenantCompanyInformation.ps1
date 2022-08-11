@@ -110,13 +110,13 @@ $Result = Invoke-SQLCmd @params
 
 foreach ($tenant in $tenants) {
 
-$record = Get-MsolCompanyInformation -TenantId $tenant.TenantId
+$records = Get-MsolCompanyInformation -TenantId $tenant.TenantId
 
 $replace = "'"
 $new = "''"
 foreach($record in $records)
 {
-$TenantName = $TenantName.replace($replace, $new)
+$TenantName = $tenant.TenantName.replace($replace, $new)
 $Date = [System.DateTime]::Today
 $params.Query = "
 INSERT INTO [dbo].[AllTenantCompanyInformation] (
