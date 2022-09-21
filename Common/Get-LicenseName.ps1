@@ -180,7 +180,7 @@ Function Get-LicenseName {
         YAMMER_ENTERPRISE                  = 'Yammer'
         YAMMER_ENTERPRISE_STANDALONE       = 'Yammer Enterprise'
         YAMMER_MIDSIZE                     = 'Yammer'
-        NONPROFIT_PORTAL                   = 'Non-Profit Portal'
+        NONPROFIT_PORTAL                   = ''
         SMB_APPS                           = 'Business Apps (free)'
         ATP_ENTERPRISE_FACULTY             = 'Exchange Online Advanced Threat Protection'
         SPE_F1                             = 'Microsoft Subscription - Firstline Workers F1'
@@ -194,6 +194,7 @@ Function Get-LicenseName {
         MCOPSTN9 = 'Microsoft Add On - International Calling Plan for SMB'
         MCOCAP = 'Microsoft Add On - Common Area Phone'
         PHONESYSTEM_VIRTUALUSER = 'MS M365 Add-On - Phone System Virtual User'
+        TEAMS_EXPLORATORY = ''
     } 
     $Tassignedlicense = ""
     $Fassignedlicense = ""
