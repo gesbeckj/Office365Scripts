@@ -75,6 +75,11 @@ $new = "''"
 $TenantName = $TenantName.replace($replace, $new)
 $Date = [System.DateTime]::Today
 
+if($records.count -gt 1)
+{
+$records = $records | where {$_.IsDefault -eq $false}
+}
+
 foreach($record in $records)
 {
 $record.TargetedUsersToProtect = $record.TargetedUsersToProtect.replace($replace,$new)
