@@ -180,7 +180,7 @@ Function Get-LicenseName {
         YAMMER_ENTERPRISE                  = 'Yammer'
         YAMMER_ENTERPRISE_STANDALONE       = 'Yammer Enterprise'
         YAMMER_MIDSIZE                     = 'Yammer'
-        NONPROFIT_PORTAL                   = ""
+        NONPROFIT_PORTAL                   = "IGNORE"
         SMB_APPS                           = 'Business Apps (free)'
         ATP_ENTERPRISE_FACULTY             = 'Exchange Online Advanced Threat Protection'
         SPE_F1                             = 'Microsoft Subscription - Firstline Workers F1'
@@ -194,7 +194,7 @@ Function Get-LicenseName {
         MCOPSTN9 = 'Microsoft Add On - International Calling Plan for SMB'
         MCOCAP = 'Microsoft Add On - Common Area Phone'
         PHONESYSTEM_VIRTUALUSER = 'MS M365 Add-On - Phone System Virtual User'
-        TEAMS_EXPLORATORY = ""
+        TEAMS_EXPLORATORY = "IGNORE"
     } 
     $Tassignedlicense = ""
     $Fassignedlicense = ""
@@ -202,7 +202,11 @@ Function Get-LicenseName {
     $userlicense = ""
     foreach ($license in $licenseparts) { 
         if ($Sku.Item($license)) { 
-            $Tassignedlicense = $Sku.Item("$($license)") + "::" + $Tassignedlicense 
+        if($Sku.Item($license) -ne "IGNORE")
+        {
+                    $Tassignedlicense = $Sku.Item("$($license)") + "::" + $Tassignedlicense 
+        }
+
         } else { 
             Write-Warning -Message "user $($user) has an unrecognized license $license. Please update script." 
             $Fassignedlicense = "UNKNOWN" + "::" + $Fassignedlicense 
