@@ -43,7 +43,14 @@ Function Get-AllTenantLicenseSummary
                 {
                 if ($null -eq  $subscriptionInfo.OwnerObjectID)
                 {
+                    if($subscriptionInfo.AccountName = "reseller-account")
+                    {
+                           $isCSP = "True"
+                    }
+                    else
+                    {
                     $isCSP = "False"
+                    }
                 }
                 else
                 {
